@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<mapper namespace="mappers.article.mapper">
+
+	<insert id="insertArticle" parameterType="com.lkssoft.hello.vo.Article">
+	</insert>
+	
+	<select id="selectArticle">
+	</select>
+
+</mapper>
