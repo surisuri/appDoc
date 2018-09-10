@@ -9,21 +9,25 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.lkssoft.appDoc.hello.service.HelloService;
+import com.lkssoft.appDoc.hello.service.ArticleService;
 import com.lkssoft.appDoc.hello.vo.Article;
 
 @RestController
 @RequestMapping("/hello")
-public class HelloController {
+public class ArticleController {
 	
 	@Autowired
-	private HelloService helloService;	
+	private ArticleService helloService;	
 
-	
+	@GetMapping("/")
+	public String index() {
+		return "index";
+	}
 	
 	@GetMapping("{articleId}")
 	@ResponseBody
 	public Article viewDetail(@PathVariable String articleId) {
+
 		Article article = this.helloService.viewArticleDetail(articleId);
 		return article;
 	}
@@ -31,7 +35,7 @@ public class HelloController {
 	@PostMapping("/write")
 	@ResponseBody
 	public Article write(@RequestBody Article article) {
-		Article a = article;
+		Article a = this.helloService.write(article);
 		return a;
 	}
 }

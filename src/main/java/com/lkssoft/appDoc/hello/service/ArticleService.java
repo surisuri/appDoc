@@ -7,7 +7,7 @@ import com.lkssoft.appDoc.hello.dao.ArticleDAO;
 import com.lkssoft.appDoc.hello.vo.Article;
 
 @Service
-public class HelloService {
+public class ArticleService {
 
 	@Autowired
 	private ArticleDAO articleDAO;
@@ -16,4 +16,8 @@ public class HelloService {
 		return articleDAO.selectArticleById(articleId);
 	}
 	
+	public Article write(Article article) {
+		articleDAO.insertArticle(article);
+		return article;
+	}
 }

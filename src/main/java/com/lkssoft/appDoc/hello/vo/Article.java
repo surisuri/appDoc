@@ -9,7 +9,16 @@ public class Article {
 	
 	private String content;
 
+	/*
+	 * 디폴트 생성자
+	 */
+	public Article() {
+		
+	}
 
+	/*
+	 * 초기값 세팅 생성자
+	 */
 	public Article(int articleId, String author, String title, String content) {
 		this.articleId = articleId;
 		this.author = author;

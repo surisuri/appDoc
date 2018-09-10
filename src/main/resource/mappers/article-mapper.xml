@@ -1,11 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
-<mapper namespace="mappers.article.mapper">
-
-	<insert id="insertArticle" parameterType="com.lkssoft.hello.vo.Article">
+<!DOCTYPE mapper
+		  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+		  		 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+		  		 
+<mapper namespace="mappers.article-mapper">
+	
+	<insert id="insertArticle" parameterType="com.lkssoft.appDoc.hello.vo.Article">
+		insert into article(article_id, author, title, content)
+			values(#{articleId}, #{author}, #{title}, #{content})
 	</insert>
 	
-	<select id="selectArticle">
+	<select id="selectArticleById" parameterType="string" resultType="com.lkssoft.appDoc.hello.vo.Article">
+		select article_id as articleId, 
+				author , 
+				title , 
+				content
+		   from article
+		  where article_id = #{articleId}
 	</select>
-
+	
 </mapper>
