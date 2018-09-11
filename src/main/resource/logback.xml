@@ -1,11 +1,55 @@
-<!-- <?xml version="1.0" encoding="UTF-8"?>
-<configuration>
-    <include resource="org/springframework/boot/logging/logback/base.xml"/>
-    log4jdbc-log4j2
-    <logger name="jdbc.sqlonly" level="DEBUG"/>
-    <logger name="jdbc.sqltiming" level="INFO"/>
-    <logger name="jdbc.audit" level="WARN"/>
-    <logger name="jdbc.resultset" level="ERROR"/>
-    <logger name="jdbc.resultsettable" level="ERROR"/>
-    <logger name="jdbc.connection" level="INFO"/>
-</configuration> -->
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="30 seconds">
+
+    <!-- 변수 지정 -->
+    <property name="LOG_DIR" value="/logs" />
+    <property name="LOG_PATH_NAME" value="${LOG_DIR}/data.log" />
+    
+	<appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+            <pattern>%d{HH:mm:ss.SSS} %highlight [%thread] [%-5p] [%F]%M\(%L\) : %m%n</pattern>
+		</encoder>
+	</appender>
+	
+    <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH_NAME}</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH_NAME}.%d{yyyyMMdd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory> <!-- 30일이 지난 파일은 삭제 -->
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} %highlight [%thread][%-5p] [%F]%M\(%L\) : %m%n</pattern>
+        </encoder>
+    </appender>
+
+	<logger name="org.springframework" level="INFO" />
+	<logger name="com.lkssoft.appDoc" level="DEBUG" />
+	
+	<root level="DEBUG">
+		<appender-ref ref="console" />
+	</root>
+    <root level="INFO">
+        <appender-ref ref="file" />
+        <appender-ref ref="console" />
+    </root>
+    <root level="WARN">
+        <appender-ref ref="file" />
+        <appender-ref ref="console" />
+    </root>
+	
+    <!-- TRACE > DEBUG > INFO > WARN > ERROR, 대소문자 구분 안함 -->
+    <!-- profile 을 읽어서 appender 을 설정할수 있다.(phase별 파일을 안만들어도 되는 좋은 기능) 
+    <springProfile name="local">
+      <root level="DEBUG">
+        <appender-ref ref="file" />
+        <appender-ref ref="console" />
+      </root>
+    </springProfile>
+    <springProfile name="real">
+      <root level="INFO">
+        <appender-ref ref="file" />
+        <appender-ref ref="console" />
+      </root>
+    </springProfile>-->
+    
+</configuration>

@@ -29,11 +29,23 @@
 	    <groupId>org.springframework</groupId>
 	    <artifactId>spring-context</artifactId>
 	    <version>5.0.8.RELEASE</version>
+	    <exclusions>
+	    	<exclusion>
+	    		<groupId>commons-logging</groupId>
+	    		<artifactId>commons-logging</artifactId>
+	    	</exclusion>
+	    </exclusions>
 	  </dependency>
 	  <dependency>
 	    <groupId>org.springframework</groupId>
 	    <artifactId>spring-webmvc</artifactId>
 	    <version>5.0.8.RELEASE</version>
+	    <exclusions>
+	    	<exclusion>
+	    		<groupId>commons-logging</groupId>
+	    		<artifactId>commons-logging</artifactId>
+	    	</exclusion>
+	    </exclusions>
  	  </dependency>
  	  <dependency>
 	    <groupId>com.fasterxml.jackson.core</groupId>
@@ -66,9 +78,30 @@
 		<version>8.0.12</version>
 	  </dependency>
 	  <dependency>
-	    <groupId>org.bgee.log4jdbc-log4j2</groupId>
-	    <artifactId>log4jdbc-log4j2-jdbc4.1</artifactId>
-	    <version>1.16</version>
+		 <groupId>org.aspectj</groupId>
+		 <artifactId>aspectjweaver</artifactId>
+		 <version>1.6.11</version>
 	  </dependency>
+	  <dependency>
+		 <groupId>org.aspectj</groupId>
+		 <artifactId>aspectjrt</artifactId>
+		 <version>1.6.8</version>
+	  </dependency>
+	  <dependency>
+	    <groupId>org.slf4j</groupId>
+	    <artifactId>slf4j-api</artifactId>
+	    <version>1.7.25</version>
+	  </dependency>
+	  <dependency>
+		<groupId>org.slf4j</groupId>
+		<artifactId>jcl-over-slf4j</artifactId>
+		<version>1.7.25</version>
+	  </dependency>
+	  <dependency>
+	    <groupId>ch.qos.logback</groupId>
+	    <artifactId>logback-classic</artifactId>
+	    <version>1.2.3</version>
+	  </dependency>
+	  
   </dependencies>  
 </project>
