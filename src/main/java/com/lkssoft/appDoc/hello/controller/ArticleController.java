@@ -5,11 +5,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.lkssoft.appDoc.hello.service.ArticleService;
 import com.lkssoft.appDoc.hello.vo.Article;
@@ -19,7 +17,7 @@ import com.lkssoft.appDoc.hello.vo.Article;
 public class ArticleController {
 	
 	@Autowired
-	private ArticleService helloService;	
+	private ArticleService articleService;	
     private static final Logger logger = LoggerFactory.getLogger(ArticleController.class);
 
     @GetMapping("/")
@@ -33,20 +31,18 @@ public class ArticleController {
 		return "index";
 	}
 	
-	@GetMapping("{articleId}")
+	/*@GetMapping("{articleId}")
 	@ResponseBody
 	public Article viewDetail(@PathVariable String articleId) {
 
-    	logger.debug("debug"+articleId);
-
-    	Article article = this.helloService.viewArticleDetail(articleId);
+    	Article article = this.articleService.viewArticleDetail(articleId);
 		return article;
 	}
-	
+	 */	
+    
 	@PostMapping("/write")
-	@ResponseBody
 	public Article write(@RequestBody Article article) {
-		Article a = this.helloService.write(article);
+		Article a = this.articleService.write(article);
 		return a;
 	}
 }

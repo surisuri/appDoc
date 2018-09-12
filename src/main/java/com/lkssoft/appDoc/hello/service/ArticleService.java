@@ -19,7 +19,6 @@ public class ArticleService {
     public Article viewArticleDetail(String articleId) {
     	
     	logger.debug("viewArticleDetail service");
-    	
 		return articleDAO.selectArticleById(articleId);
 	}
 	

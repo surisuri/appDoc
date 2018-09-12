@@ -7,7 +7,7 @@
     
 	<appender name="console" class="ch.qos.logback.core.ConsoleAppender">
 		<encoder>
-            <pattern>%d{HH:mm:ss.SSS} %highlight [%thread] [%-5p] [%F]%M\(%L\) : %m%n</pattern>
+            <pattern>%highlight %d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] [%-5p] [%F]%M\(%L\) : %m%n</pattern>
 		</encoder>
 	</appender>
 	
@@ -18,7 +18,7 @@
             <maxHistory>30</maxHistory> <!-- 30일이 지난 파일은 삭제 -->
         </rollingPolicy>
         <encoder>
-            <pattern>%d{HH:mm:ss.SSS} %highlight [%thread][%-5p] [%F]%M\(%L\) : %m%n</pattern>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight [%thread][%-5p] [%F]%M\(%L\) : %m%n</pattern>
         </encoder>
     </appender>
 
