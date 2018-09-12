@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.lkssoft.appDoc.hello.service.ArticleService;
 import com.lkssoft.appDoc.hello.vo.Article;
@@ -22,12 +23,6 @@ public class ArticleController {
 
     @GetMapping("/")
 	public String index() {
-    	logger.trace("trace");
-    	logger.debug("debug");
-    	logger.info("info");
-    	logger.warn("warn");
-    	logger.error("error");
-    	
 		return "index";
 	}
 	
@@ -41,6 +36,7 @@ public class ArticleController {
 	 */	
     
 	@PostMapping("/write")
+	@ResponseBody
 	public Article write(@RequestBody Article article) {
 		Article a = this.articleService.write(article);
 		return a;

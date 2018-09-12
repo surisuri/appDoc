@@ -1,5 +1,7 @@
 package com.lkssoft.appDoc.com.controller;
 
+import java.sql.SQLIntegrityConstraintViolationException;
+
 import org.mybatis.spring.MyBatisSystemException;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -36,5 +38,14 @@ public class GlobalExeptionHandler {
 		model.addAttribute("msg", e.getMessage());
 		
 		return "error";
-	} 
+	}
+	
+	@ExceptionHandler(SQLIntegrityConstraintViolationException.class)
+	public String handleSQLCVEException(Exception e, Model model) {
+		
+		model.addAttribute("type", e.getClass().getSimpleName()	);
+		model.addAttribute("msg", e.getMessage());
+		
+		return "error";
+	}
 }
