@@ -1,4 +1,4 @@
-package com.lkssoft.appDoc.com;
+package com.lkssoft.appDoc.com.vo;
 
 public class AppDocSessionVO {
 	

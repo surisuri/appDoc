@@ -1,4 +1,4 @@
-package com.lkssoft.appDoc.com;
+package com.lkssoft.appDoc.com.vo;
 
 public class AppDocContext {
 	
@@ -7,6 +7,11 @@ public class AppDocContext {
 	 */
 	private String systemName;
 
+	/*
+	 * appDoc Description 
+	 */
+	private String systemDescription;
+	
 	private AppDocSessionVO sessionVO;
 	
 	public String getSystemName() {
@@ -23,5 +28,13 @@ public class AppDocContext {
 
 	public void setSessionVO(AppDocSessionVO sessionVO) {
 		this.sessionVO = sessionVO;
+	}
+
+	public String getSystemDescription() {
+		return systemDescription;
+	}
+
+	public void setSystemDescription(String systemDescription) {
+		this.systemDescription = systemDescription;
 	}
 }

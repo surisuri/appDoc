@@ -1,24 +1,24 @@
 package com.lkssoft.appDoc.com.svc;
 
-import javax.annotation.PostConstruct;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.stereotype.Service;
 
-import com.lkssoft.appDoc.com.AppDocContext;
 import com.lkssoft.appDoc.com.AppDocContextLoader;
+import com.lkssoft.appDoc.com.vo.AppDocContext;
 
 /**
- * appDoc Bean 로딩 후 context 초기화
+ * appDoc Bean
  *  
  * @author suri
  *
  */
-@PropertySource({ "classpath:config/property/systemInit.properties" })
+@Service
+@PropertySource({ "classpath:property/systemInit.properties" })
 public class AppDocSystemInit implements InitializingBean, DisposableBean{
 
 	private static final Logger logger = LoggerFactory.getLogger(AppDocSystemInit.class);
@@ -26,19 +26,24 @@ public class AppDocSystemInit implements InitializingBean, DisposableBean{
 	@Value("${appDoc.systemName}")
 	private String systemName;
 	
+	@Value("${appDoc.systemDescription}")
+	private String systemDescription;
+	
 	@Override
 	public void afterPropertiesSet() {
-		logger.info("appDocSystemInit webapplication context 정보를 세팅한다.");
+		logger.info("appDocSystemInit webapplication context start.");
 		
-		// AppDocContext를 초기화 한다.
+		// AppDocContex loading
 		AppDocContext ctx = AppDocContextLoader.getAppDocContext();
 		ctx.setSystemName(systemName);
+		ctx.setSystemDescription(systemDescription);
 		
-		logger.info("systemName : " + ctx.getSystemName());
+		logger.info("systemName : " + ctx.getSystemName() );
+		logger.info("systemDescription : " + ctx.getSystemDescription() );
 	}
 	
 	@Override
 	public void destroy() throws Exception{
-		logger.info("system 종료");
+		logger.info("system destroy");
 	}
 }
