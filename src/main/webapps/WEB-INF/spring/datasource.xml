@@ -11,28 +11,28 @@
 
 	<context:property-placeholder location="classpath:config/database.properties"/>
 	
+    <!-- MySQL dataSource --> 
 	<bean id="dataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
 		<property name="driverClass" value="${db.driverClass}" />
 		<property name="url" value="${db.url}" />
 		<property name="username" value="${db.username}" />
 		<property name="password" value="${db.password}" />
 	</bean>
-		
+
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource"/>
 		<property name="configLocation" value="classpath:mybatis-config.xml" />
-		<!-- <property name="mapperLocations">
+		<property name="mapperLocations">
 			<list>
-				<value></value>
+				<value>classpath*:mappers/**/*.xml</value>
 			</list>
-		</property> -->
-		<property name="mapperLocations" value="classpath*:mappers/*.xml" />
+		</property> 
 	</bean>	
 	
 	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
 		<constructor-arg ref="sqlSessionFactory" />
 	</bean>
-	
+	 
 	<!-- transaction -->
 	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="dataSource" />

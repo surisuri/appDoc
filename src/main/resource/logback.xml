@@ -26,12 +26,13 @@
 	<logger name="com.lkssoft.appDoc" level="DEBUG" />
 	<logger name="org.mybatis" level="DEBUG" additivity="false"/>
 	
-  <logger name="jdbc" level="DEBUG" additivity="false" />
-  <logger name="jdbc.sqlonly" level="DEBUG" additivity="false"/>
-  <logger name="jdbc.sqltiming" level="DEBUG" additivity="false"/>
-  <logger name="jdbc.resultsettable" level="DEBUG" additivity="false"/>
-	
+    <logger name="jdbc" level="DEBUG" additivity="false" />
+    <logger name="jdbc.sqlonly" level="DEBUG" additivity="false"/>
+    <logger name="jdbc.sqltiming" level="DEBUG" additivity="false"/>
+    <logger name="jdbc.resultsettable" level="DEBUG" additivity="false"/>
+	 
 	<root level="DEBUG">
+        <appender-ref ref="file" />
 		<appender-ref ref="console" />
 	</root>
     <root level="INFO">
