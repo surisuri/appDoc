@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="Schedule">
+  
+  	<select id="nextSequeceNumber" resultType="java.lang.String">
+  		    SELECT IFNULL(MAX(CAST(SCHEDULE_ID AS UNSIGNED)), 0) + 1
+  		  FROM schedule
+  	</select>
+  
+    <select id="selectListEvent" parameterType="com.lkssoft.project.reserve.schedule.svc.ScheduleVO" 
+         resultType="map">
+ 		/*Schedule.selectListEvent 스케쥴 이벤트 목록을 조회한다. */
+ 		SELECT SCHEDULE_ID
+        		   , DATE_FORMAT(EVENT_DATE, '%Y-%m-%d') AS EVENT_DATE
+        		   , EVENT_START_TIME 
+        		   , EVENT_END_TIME 
+        		   , PATIENT_NAME
+        		   , TREAT_DVS_CODE
+        		   , (SELECT inspection_name
+                  FROM medicalcharge b
+			     WHERE b.inspection_Code = a.treat_dvs_code ) "TREAT_DVS_NAME"
+        		   , SIMPLE_MSG_CTNT
+        		   , EVENT_STATUS
+        		   , EXAM_USR_NM 
+        		   , PRESCRIBER_USR_NM
+        		   , DELETE_YN
+        		   , SCHEDULE_BATCH_CREATE_YN
+        		   , CREATE_DT
+        		   , CREATE_USR_ID 
+        		   , UPDATE_DT
+        		   , UPDATE_USR_ID
+ 		  FROM schedule a
+ 		 WHERE EVENT_DATE BETWEEN STR_TO_DATE(#{startDate}, '%Y-%m-%d') AND STR_TO_DATE(#{endDate}, '%Y-%m-%d')
+ 		   AND DELETE_YN = 'N'
+     </select>
+  
+    <insert id="insertSchedule" parameterType="com.lkssoft.project.reserve.schedule.svc.ScheduleVO">
+				INSERT INTO schedule (
+						 SCHEDULE_ID
+            		   , EVENT_DATE 
+            		   , EVENT_START_TIME 
+            		   , EVENT_END_TIME 
+            		   , PATIENT_NAME
+            		   , TREAT_DVS_CODE 
+            		   , SIMPLE_MSG_CTNT
+            		   , EVENT_STATUS
+            		   , EXAM_USR_NM
+            		   , PRESCRIBER_USR_NM
+            		   , DELETE_YN
+            		   , CREATE_DT
+            		   , CREATE_USR_ID
+                   )
+            VALUES (#{scheduleId}
+                    , #{eventDate}
+                    , #{eventStartTime}
+                    , #{eventEndTime}
+                    , #{patientName}
+                    , #{treatDvsCode}
+                    , #{simpleMsgCtnt}
+                    , #{eventStatus}
+                    , #{examUsrNm}
+                    , #{prescriberUsrNm}
+                    , IFNULL(#{deleteYn}, 'N')
+                    , now()
+                    , #{createUsrId}
+                   )  
+    </insert>
+    
+    <update id="updateSchedule" parameterType="com.lkssoft.project.reserve.schedule.svc.ScheduleVO">
+	   UPDATE schedule
+                 SET 
+                 EVENT_DATE = #{eventDate}
+                 , EVENT_START_TIME = #{eventStartTime}
+                 , EVENT_END_TIME = #{eventEndTime}
+                 , PATIENT_NAME = #{patientName}
+                 , TREAT_DVS_CODE = #{treatDvsCode}
+                 , SIMPLE_MSG_CTNT = #{simpleMsgCtnt}
+                 , EVENT_STATUS = #{eventStatus}
+                 , EXAM_USR_NM = #{examUsrNm}
+                 , PRESCRIBER_USR_NM = #{prescriberUsrNm}
+                 , DELETE_YN = IFNULL(#{deleteYn}, 'N')
+                 , UPDATE_DT = now()
+                 , UPDATE_USR_ID = #{updateUsrId}
+           WHERE SCHEDULE_ID = #{scheduleId}
+	</update> 
+	
+    <delete id="deleteSchedule" parameterType="com.lkssoft.project.reserve.schedule.svc.ScheduleVO">
+	   UPDATE schedule
+          SET DELETE_YN = IFNULL(#{deleteYn}, 'N')	
+        WHERE SCHEDULE_ID = #{scheduleId}
+    </delete>   
+       
+</mapper>

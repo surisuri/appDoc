@@ -1,0 +1,253 @@
+/*
+jQWidgets v5.4.0 (2017-Oct)
+Copyright (c) 2011-2017 jQWidgets.
+License: https://jqwidgets.com/license/
+*/
+/// <reference path="jqwidgets.d.ts" />
+import '../jqwidgets/jqxcore.js';
+import '../jqwidgets/jqxbuttons.js';
+import '../jqwidgets/jqxribbon.js';
+import '../jqwidgets/jqxlayout.js';
+import { Component, Input, Output, EventEmitter, ElementRef, forwardRef, OnChanges, SimpleChanges, ChangeDetectionStrategy } from '@angular/core';
+declare let JQXLite: any;
+
+@Component({
+    selector: 'jqxLayout',
+    template: '<div><ng-content></ng-content></div>'
+})
+
+export class jqxLayoutComponent implements OnChanges
+{
+   @Input('contextMenu') attrContextMenu: Boolean;
+   @Input('layout') attrLayout: Array<jqwidgets.LayoutLayout>;
+   @Input('minGroupHeight') attrMinGroupHeight: String | Number;
+   @Input('minGroupWidth') attrMinGroupWidth: String | Number;
+   @Input('resizable') attrResizable: Boolean;
+   @Input('rtl') attrRtl: Boolean;
+   @Input('theme') attrTheme: String;
+   @Input('width') attrWidth: String | Number;
+   @Input('height') attrHeight: String | Number;
+
+   @Input('auto-create') autoCreate: boolean = true;
+
+   properties: string[] = ['contextMenu','height','layout','minGroupHeight','minGroupWidth','resizable','rtl','theme','width'];
+   host: any;
+   elementRef: ElementRef;
+   widgetObject:  jqwidgets.jqxLayout;
+
+   constructor(containerElement: ElementRef) {
+      this.elementRef = containerElement;
+   }
+
+   ngOnInit() {
+      if (this.autoCreate) {
+         this.createComponent(); 
+      }
+   }; 
+
+   ngOnChanges(changes: SimpleChanges) {
+      if (this.host) {
+         for (let i = 0; i < this.properties.length; i++) {
+            let attrName = 'attr' + this.properties[i].substring(0, 1).toUpperCase() + this.properties[i].substring(1);
+            let areEqual: boolean;
+
+            if (this[attrName] !== undefined) {
+               if (typeof this[attrName] === 'object') {
+                  if (this[attrName] instanceof Array) {
+                     areEqual = this.arraysEqual(this[attrName], this.host.jqxLayout(this.properties[i]));
+                  }
+                  if (areEqual) {
+                     return false;
+                  }
+
+                  this.host.jqxLayout(this.properties[i], this[attrName]);
+                  continue;
+               }
+
+               if (this[attrName] !== this.host.jqxLayout(this.properties[i])) {
+                  this.host.jqxLayout(this.properties[i], this[attrName]); 
+               }
+            }
+         }
+      }
+   }
+
+   arraysEqual(attrValue: any, hostValue: any): boolean {
+      if (attrValue.length != hostValue.length) {
+         return false;
+      }
+      for (let i = 0; i < attrValue.length; i++) {
+         if (attrValue[i] !== hostValue[i]) {
+            return false;
+         }
+      }
+      return true;
+   }
+
+   manageAttributes(): any {
+      let options = {};
+      for (let i = 0; i < this.properties.length; i++) {
+         let attrName = 'attr' + this.properties[i].substring(0, 1).toUpperCase() + this.properties[i].substring(1);
+         if (this[attrName] !== undefined) {
+            options[this.properties[i]] = this[attrName];
+         }
+      }
+      return options;
+   }
+
+   moveClasses(parentEl: HTMLElement, childEl: HTMLElement): void {
+      let classes: any = parentEl.classList;
+      if (classes.length > 0) {
+        childEl.classList.add(...classes);
+      }
+      parentEl.className = '';
+   }
+
+   moveStyles(parentEl: HTMLElement, childEl: HTMLElement): void {
+      let style = parentEl.style.cssText;
+      childEl.style.cssText = style
+      parentEl.style.cssText = '';
+   }
+
+   createComponent(options?: any): void {
+      if (options) {
+         JQXLite.extend(options, this.manageAttributes());
+      }
+      else {
+        options = this.manageAttributes();
+      }
+      this.host = JQXLite(this.elementRef.nativeElement.firstChild);
+
+      this.moveClasses(this.elementRef.nativeElement, this.host[0]);
+      this.moveStyles(this.elementRef.nativeElement, this.host[0]);
+
+      this.__wireEvents__();
+      this.widgetObject = jqwidgets.createInstance(this.host, 'jqxLayout', options);
+
+      this.__updateRect__();
+   }
+
+   createWidget(options?: any): void {
+        this.createComponent(options);
+   }
+
+   __updateRect__() : void {
+      this.host.css({ width: this.attrWidth, height: this.attrHeight });
+   }
+
+   setOptions(options: any) : void {
+      this.host.jqxLayout('setOptions', options);
+   }
+
+   // jqxLayoutComponent properties
+   contextMenu(arg?: boolean) : any {
+      if (arg !== undefined) {
+          this.host.jqxLayout('contextMenu', arg);
+      } else {
+          return this.host.jqxLayout('contextMenu');
+      }
+   }
+
+   height(arg?: String | Number) : any {
+      if (arg !== undefined) {
+          this.host.jqxLayout('height', arg);
+      } else {
+          return this.host.jqxLayout('height');
+      }
+   }
+
+   layout(arg?: Array<jqwidgets.LayoutLayout>) : any {
+      if (arg !== undefined) {
+          this.host.jqxLayout('layout', arg);
+      } else {
+          return this.host.jqxLayout('layout');
+      }
+   }
+
+   minGroupHeight(arg?: String | Number) : any {
+      if (arg !== undefined) {
+          this.host.jqxLayout('minGroupHeight', arg);
+      } else {
+          return this.host.jqxLayout('minGroupHeight');
+      }
+   }
+
+   minGroupWidth(arg?: String | Number) : any {
+      if (arg !== undefined) {
+          this.host.jqxLayout('minGroupWidth', arg);
+      } else {
+          return this.host.jqxLayout('minGroupWidth');
+      }
+   }
+
+   resizable(arg?: boolean) : any {
+      if (arg !== undefined) {
+          this.host.jqxLayout('resizable', arg);
+      } else {
+          return this.host.jqxLayout('resizable');
+      }
+   }
+
+   rtl(arg?: boolean) : any {
+      if (arg !== undefined) {
+          this.host.jqxLayout('rtl', arg);
+      } else {
+          return this.host.jqxLayout('rtl');
+      }
+   }
+
+   theme(arg?: string) : any {
+      if (arg !== undefined) {
+          this.host.jqxLayout('theme', arg);
+      } else {
+          return this.host.jqxLayout('theme');
+      }
+   }
+
+   width(arg?: String | Number) : any {
+      if (arg !== undefined) {
+          this.host.jqxLayout('width', arg);
+      } else {
+          return this.host.jqxLayout('width');
+      }
+   }
+
+
+   // jqxLayoutComponent functions
+   destroy(): void {
+      this.host.jqxLayout('destroy');
+   }
+
+   loadLayout(Layout: any): void {
+      this.host.jqxLayout('loadLayout', Layout);
+   }
+
+   refresh(): void {
+      this.host.jqxLayout('refresh');
+   }
+
+   render(): void {
+      this.host.jqxLayout('render');
+   }
+
+   saveLayout(): any {
+      return this.host.jqxLayout('saveLayout');
+   }
+
+
+   // jqxLayoutComponent events
+   @Output() onCreate = new EventEmitter();
+   @Output() onPin = new EventEmitter();
+   @Output() onResize = new EventEmitter();
+   @Output() onUnpin = new EventEmitter();
+
+   __wireEvents__(): void {
+      this.host.on('create', (eventData: any) => { this.onCreate.emit(eventData); });
+      this.host.on('pin', (eventData: any) => { this.onPin.emit(eventData); });
+      this.host.on('resize', (eventData: any) => { this.onResize.emit(eventData); });
+      this.host.on('unpin', (eventData: any) => { this.onUnpin.emit(eventData); });
+   }
+
+} //jqxLayoutComponent
+
+

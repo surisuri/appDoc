@@ -6,6 +6,7 @@
   	<param-value>
   			/WEB-INF/spring/root-context.xml
   			/WEB-INF/spring/datasource.xml
+  			/WEB-INF/spring/spring-security.xml
   	</param-value>
   </context-param>
 	
@@ -39,5 +40,28 @@
 		<filter-name>encodingFilter</filter-name>
 		<url-pattern>/*</url-pattern>
    </filter-mapping>
+
+	<!-- spring security concurrent session control  -->
+	<listener>
+	    <listener-class>
+	      org.springframework.security.web.session.HttpSessionEventPublisher
+	    </listener-class>
+	</listener>
+
+	<!-- session tracking -->
+	<session-config>
+	     <tracking-mode>COOKIE</tracking-mode>
+	</session-config>
+	
+	<!-- spring security -->
+	<filter>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
 
 </web-app>
