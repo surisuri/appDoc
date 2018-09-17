@@ -8,7 +8,7 @@
   		  FROM schedule
   	</select>
   
-    <select id="selectListEvent" parameterType="com.lkssoft.project.reserve.schedule.svc.ScheduleVO" 
+    <select id="selectListEvent" parameterType="com.lkssoft.appDoc.schedule.svc.ScheduleVO" 
          resultType="map">
  		/*Schedule.selectListEvent 스케쥴 이벤트 목록을 조회한다. */
  		SELECT SCHEDULE_ID
@@ -35,7 +35,7 @@
  		   AND DELETE_YN = 'N'
      </select>
   
-    <insert id="insertSchedule" parameterType="com.lkssoft.project.reserve.schedule.svc.ScheduleVO">
+    <insert id="insertSchedule" parameterType="com.lkssoft.appDoc.schedule.svc.ScheduleVO">
 				INSERT INTO schedule (
 						 SCHEDULE_ID
             		   , EVENT_DATE 
@@ -67,7 +67,7 @@
                    )  
     </insert>
     
-    <update id="updateSchedule" parameterType="com.lkssoft.project.reserve.schedule.svc.ScheduleVO">
+    <update id="updateSchedule" parameterType="com.lkssoft.appDoc.schedule.svc.ScheduleVO">
 	   UPDATE schedule
                  SET 
                  EVENT_DATE = #{eventDate}
@@ -85,7 +85,7 @@
            WHERE SCHEDULE_ID = #{scheduleId}
 	</update> 
 	
-    <delete id="deleteSchedule" parameterType="com.lkssoft.project.reserve.schedule.svc.ScheduleVO">
+    <delete id="deleteSchedule" parameterType="com.lkssoft.appDoc.schedule.svc.ScheduleVO">
 	   UPDATE schedule
           SET DELETE_YN = IFNULL(#{deleteYn}, 'N')	
         WHERE SCHEDULE_ID = #{scheduleId}

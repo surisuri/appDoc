@@ -17,7 +17,7 @@
  		  FROM medicalcharge
      </select>
   
-    <insert id="insertMedicalCharge" parameterType="com.lkssoft.project.reserve.charge.svc.MedicalChargeVO">
+    <insert id="insertMedicalCharge" parameterType="com.lkssoft.appDoc.charge.svc.MedicalChargeVO">
    											       
 			INSERT INTO medicalcharge (
 					 INSPECTION_CODE
@@ -42,7 +42,7 @@
                    )  
     </insert>
       
-    <update id="updateMedicalCharge" parameterType="com.lkssoft.project.reserve.charge.svc.MedicalChargeVO">
+    <update id="updateMedicalCharge" parameterType="com.lkssoft.appDoc.charge.svc.MedicalChargeVO">
 	   UPDATE medicalcharge
               SET  INSPECTION_NAME = #{inspectionName}
 	              , REMARK = #{remark}
@@ -53,7 +53,7 @@
            WHERE INSPECTION_CODE = #{inspectionCode}
 	</update>
 	
-	<delete id="deleteMedicalCharge" parameterType="com.lkssoft.project.reserve.charge.svc.MedicalChargeVO">
+	<delete id="deleteMedicalCharge" parameterType="com.lkssoft.appDoc.charge.svc.MedicalChargeVO">
 		DELETE FROM medicalcharge
 		  WHERE INSPECTION_CODE = #{inspectionCode}
 	</delete>

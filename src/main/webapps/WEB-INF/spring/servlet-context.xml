@@ -27,7 +27,7 @@
 	
 	<mvc:interceptors>
 		<mvc:interceptor>
-			<mvc:mapping path="/hello/**/"/>
+			<mvc:mapping path="/"/>
 			<bean id="measuringInterceptor"
 	class="com.lkssoft.appDoc.com.interceptor.MeasuringInterceptor" />
 		</mvc:interceptor>
