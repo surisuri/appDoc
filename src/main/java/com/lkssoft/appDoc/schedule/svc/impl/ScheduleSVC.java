@@ -152,7 +152,7 @@ public class ScheduleSVC implements ScheduleSEI{
 				this.insertSchedule(scheduleVo);
 				
 				if( day == 3 || day == 5) {
-					scheduleVo.setExamUsrNm("源�誘명쁽");
+					scheduleVo.setExamUsrNm("abc");
 
 					scheduleVo.setScheduleId(null);
 					scheduleVo.setEventStartTime("09:30");
