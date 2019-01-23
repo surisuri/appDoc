@@ -44,6 +44,16 @@
 	<!-- jqWidget css -->
 	<link rel="stylesheet" href="${jqwidjets}/jqwidgets/styles/jqx.base.css" type="text/css" />
 	
+	<style>
+		.calendar-container {
+		  position: fixed;
+		  bottom: 0;
+		  right: 0;
+		  left: 0;
+		  top: 0;
+		}
+	</style>
+	
 	<!-- full calendar style -->
 	<link href='${calendar}/fullcalendar.min.css' rel='stylesheet' />
 	<link href='${calendar}/fullcalendar.print.min.css' rel='stylesheet' media='print' />
@@ -155,6 +165,7 @@
 					navLinks : true, // can click day/week names to navigate views
 					selectable : true,
 					selectHelper : true,
+					height: $(window).height()*0.94,
 					select : function(start, end) {
 						
 						if( '${adminAccess}' == 'true' ){ 
@@ -534,214 +545,203 @@
 </head>
 
 <body>
+	<div id="wrapper">
+
+		<!-- Navigation -->
+		<nav class="navbar navbar-default navbar-static-top" role="navigation"
+			style="margin-bottom: 0">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse"
+					data-target=".navbar-collapse">
+					<span class="sr-only">Toggle navigation</span> <span
+						class="icon-bar"></span> <span class="icon-bar"></span> <span
+						class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="<c:url value='/welcome' />">심리실 일정</a>
+			</div>
+			<!-- /.navbar-header -->
 	
-		<div id="wrapper">
-	
-			<!-- Navigation -->
-			<nav class="navbar navbar-default navbar-static-top" role="navigation"
-				style="margin-bottom: 0">
-				<div class="navbar-header">
-					<button type="button" class="navbar-toggle" data-toggle="collapse"
-						data-target=".navbar-collapse">
-						<span class="sr-only">Toggle navigation</span> <span
-							class="icon-bar"></span> <span class="icon-bar"></span> <span
-							class="icon-bar"></span>
+			<!-- .navbar toplink -->
+			<ul class="nav navbar-top-links navbar-right">
+				<!-- /.dropdown -->
+				
+				<sec:authorize access="hasAnyRole('ROLE_ADMIN')">
+					<button type="button" class="btn btn-default btn-sm">
+						<span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
+						<a href='javascript:fn_popScheduleBatch();'>스케쥴관리</a>
 					</button>
-					<a class="navbar-brand" href="<c:url value='/welcome' />">심리실 일정</a>
-				</div>
-				<!-- /.navbar-header -->
-		
-				<!-- .navbar toplink -->
-				<ul class="nav navbar-top-links navbar-right">
-					<!-- /.dropdown -->
-					
-					<sec:authorize access="hasAnyRole('ROLE_ADMIN')">
-						<button type="button" class="btn btn-default btn-sm">
-							<span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
-							<a href='javascript:fn_popScheduleBatch();'>스케쥴관리</a>
-						</button>
-						<button type="button" class="btn btn-default btn-sm">
-							<span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>
-							<a href="<c:url value='medicalChargeView' />">수가관리</a>
-						</button>
-						<button type="button" class="btn btn-default btn-sm">
-							<span class="glyphicon glyphicon-usd" aria-hidden="true"></span>
-							수입관리
-						</button>
-					</sec:authorize>
-					
-					<li class="dropdown">
-						<a class="dropdown-toggle" data-toggle="dropdown" href="#"> 
-							<i class="fa fa-user fa-fw"></i>
-							<i class="fa fa-caret-down"></i>
-						</a>
-						<ul class="dropdown-menu dropdown-user">
-							<li>
-								<a href="#">
-									<i class="fa fa-user fa-fw"></i>
-									${user.username}
-								</a>
-							</li>
-							<li class="divider"></li>
-							<li>
-								<a href="<c:url value='/perform_logout' />"> 
-									<i class="fa fa-sign-out fa-fw"></i> Logout
-								</a>
-						    </li>
-						</ul> <!-- /.dropdown-user -->
-					</li>
-					<!-- /.dropdown -->
-				</ul>
-				<!-- /.navbar-top-links -->
-			</nav>
-	
-			<div>
-				<div class="row">
-					<div class="col-lg-12">
-						<div id="calendar"></div>
-					</div>
-				</div>
-			</div>
-			<!-- /#page-wrapper -->
+					<button type="button" class="btn btn-default btn-sm">
+						<span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>
+						<a href="<c:url value='medicalChargeView' />">수가관리</a>
+					</button>
+					<button type="button" class="btn btn-default btn-sm">
+						<span class="glyphicon glyphicon-usd" aria-hidden="true"></span>
+						수입관리
+					</button>
+				</sec:authorize>
+				
+				<li class="dropdown">
+					<a class="dropdown-toggle" data-toggle="dropdown" href="#"> 
+						<i class="fa fa-user fa-fw"></i>
+						<i class="fa fa-caret-down"></i>
+					</a>
+					<ul class="dropdown-menu dropdown-user">
+						<li>
+							<a href="#">
+								<i class="fa fa-user fa-fw"></i>
+								${user.username}
+							</a>
+						</li>
+						<li class="divider"></li>
+						<li>
+							<a href="<c:url value='/perform_logout' />"> 
+								<i class="fa fa-sign-out fa-fw"></i> Logout
+							</a>
+					    </li>
+					</ul> <!-- /.dropdown-user -->
+				</li>
+				<!-- /.dropdown -->
+			</ul>
+			<!-- /.navbar-top-links -->
+		</nav>
+
+		<div>
+			<div id="calendar"></div>
 		</div>
-		<!-- /#wrapper -->
-	
-		<!-- 스케쥴 등록/수정 화면 	-->
-	  <div id="scheduleMng" class="modal fade" role="dialog" aria-hidden="true">
-			<!--  <div class="modal-header">
-				검사/치료 일정관리
-			</div>-->
-			<div class="modal-dialog modal-sm"  role="document">
-			    <div class="modal-content">
-			  		<div class="modal-header">
-						심리실 일정관리<button type="button" class="close" data-dismiss="modal">&times;</button>
-					</div>
-			  		<div class="modal-body">
-						<form id="scheduleForm" action="registerSchedule" method="post">
-							<div class="form-group">
-								<div class="form-row">
-									<div class="col-mid-6">
-										<label for="dateLable">날짜</label> 
-										<input class="form-control"
-											id="eventDate" name="eventDate" type="date"
-											aria-describedby="dateHelp" placeholder="enter Date">
-									</div>
-								</div>			
-								<div class="form-row">
-									<div class="col-mid-3">
-										<label for="startTimeLabel">시작</label> 
-										<input class="form-control" id="eventStartTime" name="eventStartTime"
-											type="time" size="7" aria-describedby="startTimeHelp"
-											placeholder="Enter startTime">
-									</div>
-									<div class="col-mid-3">
-										<label for="endTimeLabel">종료</label> <input
-											class="form-control" id="eventEndTime" name="eventEndTime"
-											type="time" aria-describedby="endTimeHelp"
-											placeholder="Enter endTime">
-									</div>							
-								</div>
-							</div>
-							<div class="form-group">
-								<label for="nameLabel">이름</label> <input class="form-control"
-									id="patientName" name="patientName" type="text"
-									placeholder="input name">
-							</div>
-							<div class="form-group">
-								<label for="inspectionLabel">검사/치료</label>
-								<div id="treatDvsCode" name="treatDvsCode"></div>
-							</div>
-							<div class="form-group">
-								<label for="doctorNameLabel">처방자 </label> <input
-									class="form-control" id="prescriberUsrNm" name="prescriberUsrNm"
-									type="text" placeholder="input doctorName">
-							</div>
-							<div class="form-group">
-								<label for="pychologistNameLabel">검사자</label> <input
-									class="form-control" id="examUsrNm" name="examUsrNm"
-									type="text" placeholder="input pychologistName">
-							</div>
-							<div class="form-group">
-								<label for="simpleMsgCtntLabel">간단 메시지</label> <input
-									class="form-control" id="simpleMsgCtnt" name="simpleMsgCtnt"
-									type="text" placeholder="input remark">
-							</div>
-					        <div class="form-group">
-								<div class="form-row">
-									<input type="hidden" id='scheduleId' name='scheduleId' />
-									<input type="hidden" id='eventStatus' name='eventStatus'>
-									<input type="hidden" id='deleteYn' name='deleteYn'>
- 									<span>
-										<button type="button" class="btn btn-success" id="registerSchedule">예약</button>
-									</span>
-									<span>
-										<button type="button" class="btn btn-warning" id="cancelSchedule">예약취소</button>
-									</span>
-									<sec:authorize access="hasAnyRole('ROLE_ADMIN')">
-										<span>
-											<button type="button" class="btn btn-danger" id="deleteSchedule">예약삭제</button>
-										</span>
-									</sec:authorize>
-									<span>
-										<button type="button" class="btn btn-primary" id="closeSchedule">닫기</button>
-									</span>		
-								</div>
-							</div>
-						</form>
-					</div> <!-- end of modal-body > 
-					<div class="modal-footer">
-					</div>-->
+		<!-- /#page-wrapper -->
+	</div>
+	<!-- /#wrapper -->
+
+	<!-- 스케쥴 등록/수정 화면 	-->
+  <div id="scheduleMng" class="modal fade" role="dialog" aria-hidden="true">
+		<!--  <div class="modal-header">
+			검사/치료 일정관리
+		</div>-->
+		<div class="modal-dialog modal-sm"  role="document">
+		    <div class="modal-content">
+		  		<div class="modal-header">
+					심리실 일정관리12<button type="button" class="close" data-dismiss="modal">&times;</button>
 				</div>
+		  		<div class="modal-body">
+					<form id="scheduleForm" action="registerSchedule" method="post">
+						<div class="form-group">
+							<div class="form-row">
+								<span>
+									<label for="dateLable">날짜</label> 
+									<input class="form-control"
+										id="eventDate" name="eventDate" type="date"
+										aria-describedby="dateHelp" placeholder="enter Date">
+								</span>
+								<span>
+									<label for="startTimeLabel">시작</label> 
+									<input class="form-control" id="eventStartTime" name="eventStartTime"
+										type="time" size="7" aria-describedby="startTimeHelp"
+										placeholder="Enter startTime">
+								</span>
+								<span>
+									<label for="endTimeLabel">종료</label> <input
+										class="form-control" id="eventEndTime" name="eventEndTime"
+										type="time" aria-describedby="endTimeHelp"
+										placeholder="Enter endTime">
+								</span>							
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="nameLabel">이름</label> <input class="form-control"
+								id="patientName" name="patientName" type="text"
+								placeholder="input name">
+							<label for="inspectionLabel">검사/치료</label>
+							<div id="treatDvsCode" name="treatDvsCode"></div>
+						</div>
+						<div class="form-group">
+							<label for="doctorNameLabel">처방자 </label> <input
+								class="form-control" id="prescriberUsrNm" name="prescriberUsrNm"
+								type="text" placeholder="input doctorName">
+							<label for="pychologistNameLabel">검사자</label> <input
+								class="form-control" id="examUsrNm" name="examUsrNm"
+								type="text" placeholder="input pychologistName">
+						</div>
+						<div class="form-group">
+							<label for="simpleMsgCtntLabel">간단 메시지</label> <input
+								class="form-control" id="simpleMsgCtnt" name="simpleMsgCtnt"
+								type="text" placeholder="input remark">
+						</div>
+				        <div class="form-group">
+							<div class="form-row">
+								<input type="hidden" id='scheduleId' name='scheduleId' />
+								<input type="hidden" id='eventStatus' name='eventStatus'>
+								<input type="hidden" id='deleteYn' name='deleteYn'>
+									<span>
+									<button type="button" class="btn btn-success" id="registerSchedule">예약</button>
+								</span>
+								<span>
+									<button type="button" class="btn btn-warning" id="cancelSchedule">예약취소</button>
+								</span>
+								<sec:authorize access="hasAnyRole('ROLE_ADMIN')">
+									<span>
+										<button type="button" class="btn btn-danger" id="deleteSchedule">예약삭제</button>
+									</span>
+								</sec:authorize>
+								<span>
+									<button type="button" class="btn btn-primary" id="closeSchedule">닫기</button>
+								</span>		
+							</div>
+						</div>
+					</form>
+				</div> <!-- end of modal-body > 
+				<div class="modal-footer">
+				</div>-->
 			</div>
 		</div>
-	 
-		<!-- 스케쥴 일괄등록	-->
-	  <div id="scheduleBatch" class="modal fade" role="dialog" aria-hidden="true">
-			<div class="modal-dialog modal-sm"  role="document">
-			    <div class="modal-content">
-			  		<div class="modal-header">
-						스케쥴 일괄등록<button type="button" class="close" data-dismiss="modal">&times;</button>
-					</div>
-			  		<div class="modal-body">
-						<form id="scheduleBatchForm" action="registerScheduleBatch" method="post">
-							<div class="form-group">
-								<div class="form-row">
-									<div class="col-mid-6">
-										<label for="dateLable">시작일자</label> 
-										<input class="form-control"
-											id="startBatchDate" name="startBatchDate" type="date"
-											aria-describedby="dateHelp" placeholder="enter startDate">
-									</div>
-								</div>	
-								<div class="form-row">
-									<div class="col-mid-6">
-										<label for="dateLable">종료일자</label> 
-										<input class="form-control"
-											id="endBatchDate" name="endbatchDate" type="date"
-											aria-describedby="dateHelp" placeholder="enter endDate">
-									</div>
-								</div>		
-							</div>
-					        <div class="form-group">
-								<div class="form-row">
- 									<span>
-										<button type="button" class="btn btn-success" id="registerScheduleBatch" 
-												onclick="javascript:fn_registerScheduleBatch();">등록</button>
-									</span>
-									<span>
-										<button type="button" class="btn btn-warning" id="cancelScheduleBatch" 
-												onclick="javascript:fn_cancelScheduleBatch();">취소</button>
-									</span>
-								</div>
-							</div>
-						</form>
-					</div> <!-- end of modal-body > 
-					<div class="modal-footer">
-					</div>-->
+	</div>
+ 
+	<!-- 스케쥴 일괄등록	-->
+  <div id="scheduleBatch" class="modal fade" role="dialog" aria-hidden="true">
+		<div class="modal-dialog modal-sm"  role="document">
+		    <div class="modal-content">
+		  		<div class="modal-header">
+					스케쥴 일괄등록<button type="button" class="close" data-dismiss="modal">&times;</button>
 				</div>
+		  		<div class="modal-body">
+					<form id="scheduleBatchForm" action="registerScheduleBatch" method="post">
+						<div class="form-group">
+							<div class="form-row">
+								<div class="col-mid-6">
+									<label for="dateLable">시작일자</label> 
+									<input class="form-control"
+										id="startBatchDate" name="startBatchDate" type="date"
+										aria-describedby="dateHelp" placeholder="enter startDate">
+								</div>
+							</div>	
+							<div class="form-row">
+								<div class="col-mid-6">
+									<label for="dateLable">종료일자</label> 
+									<input class="form-control"
+										id="endBatchDate" name="endbatchDate" type="date"
+										aria-describedby="dateHelp" placeholder="enter endDate">
+								</div>
+							</div>		
+						</div>
+				        <div class="form-group">
+							<div class="form-row">
+									<span>
+									<button type="button" class="btn btn-success" id="registerScheduleBatch" 
+											onclick="javascript:fn_registerScheduleBatch();">등록</button>
+								</span>
+								<span>
+									<button type="button" class="btn btn-warning" id="cancelScheduleBatch" 
+											onclick="javascript:fn_cancelScheduleBatch();">취소</button>
+								</span>
+							</div>
+						</div>
+					</form>
+				</div> <!-- end of modal-body > 
+				<div class="modal-footer">
+				</div>-->
 			</div>
-		</div>	 
-	 
+		</div>
+	</div>	 
+ 
 		<!-- jQuery 
 	    <script src="${admin}/vendor/jquery/jquery.min.js"></script>-->
 	
@@ -758,7 +758,7 @@
 	
 		<!-- Custom Theme JavaScript -->
 		<script src="${admin}/dist/js/sb-admin-2.js"></script>
-	
+		
 	</body>
 
 </html>
