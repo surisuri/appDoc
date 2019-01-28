@@ -19,18 +19,16 @@
 	<meta name="description" content="">
 	<meta name="author" content="">
 	
-	<title>심리실 일정</title>
+	<title>심리실 예약관리</title>
 	
 	<!-- favicon -->
 	<link rel="shortcut icon" href="${images}/favicon.ico" >
 	
 	<!-- Bootstrap Core CSS -->
-	<link href="${admin}/vendor/bootstrap/css/bootstrap.min.css"
-		rel="stylesheet">
+	<link href="${admin}/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 	
 	<!-- MetisMenu CSS -->
-	<link href="${admin}/vendor/metisMenu/metisMenu.min.css"
-		rel="stylesheet">
+	<link href="${admin}/vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
 	
 	<!-- Custom CSS -->
 	<link href="${admin}/dist/css/sb-admin-2.css" rel="stylesheet">
@@ -43,16 +41,6 @@
 	
 	<!-- jqWidget css -->
 	<link rel="stylesheet" href="${jqwidjets}/jqwidgets/styles/jqx.base.css" type="text/css" />
-	
-	<style>
-		.calendar-container {
-		  position: fixed;
-		  bottom: 0;
-		  right: 0;
-		  left: 0;
-		  top: 0;
-		}
-	</style>
 	
 	<!-- full calendar style -->
 	<link href='${calendar}/fullcalendar.min.css' rel='stylesheet' />
@@ -82,7 +70,6 @@
 		$(document).ready(
 			function() {
 				var initialLocaleCode = 'ko';
-		
 				
 				/**
 				 *  검사종류 콤보박스
@@ -161,7 +148,10 @@
 						right : 'month,agendaWeek,agendaDay,listMonth'
 					},
 					locale : initialLocaleCode,
-					businessHours : true, // display business hours
+					timezone : 'local',
+					businessHours : true,
+					weekNumbers: true,
+					nowIndicator: true,
 					navLinks : true, // can click day/week names to navigate views
 					selectable : true,
 					selectHelper : true,
@@ -236,12 +226,14 @@
 											$.map(doc.objList, function(r) {
 												var title = '';
 												if( r.PATIENT_NAME != null && r.PATIENT_NAME != '' && r.PATIENT_NAME != 'undefined'){
-													title = r.PATIENT_NAME + " (" + r.TREAT_DVS_NAME + ")"+", "+r.EXAM_USR_NM;
+													title = r.PATIENT_NAME + " (" + r.TREAT_DVS_NAME + ")";
 												}else{
 													title = '';
 												}
 												
+												// event 색 지정
 												var bgcolor = 'white';
+												var borderColor = 'gray';
 												var textcolor = 'black';
 												if(r.EVENT_STATUS == '02'){
 													bgcolor = 'green';
@@ -257,12 +249,14 @@
 													date : r.EVENT_DATE,
 													startTime : r.EVENT_START_TIME, 
 													endTime : r.EVENT_END_TIME,
-													treatDvsCode : r.TREAT_DVS_CODE, // 검사종류 
-													examUsrNm : r.EXAM_USR_NM ,		// 검사자
-													prescriberUsrNm : r.PRESCRIBER_USR_NM ,		// 처방의사
-													simpleMsgCtnt : r.SIMPLE_MSG_CTNT,		// 비고
+													treatDvsCode : r.TREAT_DVS_CODE, 
+													treatDvsName : r.TREAT_DVS_NAME,
+													examUsrNm : r.EXAM_USR_NM ,		
+													prescriberUsrNm : r.PRESCRIBER_USR_NM ,	
+													simpleMsgCtnt : r.SIMPLE_MSG_CTNT,
 													color : bgcolor,
-													textColor: textcolor
+													textColor: textcolor,
+													borderColor:borderColor
 												});
 											});
 										}
@@ -273,7 +267,31 @@
 										alert(doc);
 									}
 								});
-					}
+					},
+					eventRender: function(event, element) {
+						// 시간 포맷 변경
+						element.find('.fc-time').html( event.startTime + '~' + event.endTime); 
+						
+						// 간단 메시지 
+						var msg = event.simpleMsgCtnt;
+						if( msg != 'undefined' && msg != null 
+								&& msg != ''){
+				      		element.find('.fc-title').append("<br/>" + msg);
+						}else{
+							element.find('.fc-title').append("<br/>" + '-');
+						}
+						
+						/* popover
+						var content = event.treatDvsName;
+						element.popover({
+							title:event.patientName,
+							content:content,
+							trigger:'hover',
+							placement:'top',
+							container:'body'
+						});*/
+				    } 					
+					
 				}); // end of fullcalendar 
 				
 				// 권한에 따른 예약관리 화면 visible 여부 세팅
@@ -360,10 +378,10 @@
 								date : r.EVENT_DATE,
 								startTime : r.EVENT_START_TIME, 
 								endTime : r.EVENT_END_TIME,
-								treatDvsCode : r.TREAT_DVS_CODE, // 검사종류 
-								examUsrNm : r.EXAM_USR_NM ,		// 검사자
-								prescriberUsrNm : r.PRESCRIBER_USR_NM ,		// 처방의사
-								simpleMsgCtnt : r.SIMPLE_MSG_CTNT,		// 비고
+								treatDvsCode : r.TREAT_DVS_CODE,
+								examUsrNm : r.EXAM_USR_NM ,		
+								prescriberUsrNm : r.PRESCRIBER_USR_NM ,		
+								simpleMsgCtnt : r.SIMPLE_MSG_CTNT,		
 								color : 'white',
 								textColor: 'black'
 							});
@@ -557,7 +575,7 @@
 						class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="<c:url value='/welcome' />">심리실 일정</a>
+				<a class="navbar-brand" href="<c:url value='/welcome' />">심리실 예약</a>
 			</div>
 			<!-- /.navbar-header -->
 	
@@ -568,16 +586,16 @@
 				<sec:authorize access="hasAnyRole('ROLE_ADMIN')">
 					<button type="button" class="btn btn-default btn-sm">
 						<span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
-						<a href='javascript:fn_popScheduleBatch();'>스케쥴관리</a>
+						<a href='javascript:fn_popScheduleBatch();'>스케쥴 일괄등록</a>
 					</button>
 					<button type="button" class="btn btn-default btn-sm">
 						<span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>
 						<a href="<c:url value='medicalChargeView' />">수가관리</a>
 					</button>
-					<button type="button" class="btn btn-default btn-sm">
+					<!-- <button type="button" class="btn btn-default btn-sm">
 						<span class="glyphicon glyphicon-usd" aria-hidden="true"></span>
 						수입관리
-					</button>
+					</button> -->
 				</sec:authorize>
 				
 				<li class="dropdown">
@@ -620,7 +638,7 @@
 		<div class="modal-dialog modal-sm"  role="document">
 		    <div class="modal-content">
 		  		<div class="modal-header">
-					심리실 일정관리12<button type="button" class="close" data-dismiss="modal">&times;</button>
+					심리실 예약관리<button type="button" class="close" data-dismiss="modal">&times;</button>
 				</div>
 		  		<div class="modal-body">
 					<form id="scheduleForm" action="registerSchedule" method="post">

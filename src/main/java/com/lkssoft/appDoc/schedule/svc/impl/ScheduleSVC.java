@@ -129,7 +129,7 @@ public class ScheduleSVC implements ScheduleSEI{
 		
 		Date endDate   = sdf.parse(strEndDate);
 		Calendar endCal = Calendar.getInstance();
-		endCal.setTime(endDate);
+		endCal.setTime(endDate);		
 		endCal.add(Calendar.DAY_OF_WEEK, 1);
 		
 		while( curCal.before(endCal) ) {
@@ -138,7 +138,7 @@ public class ScheduleSVC implements ScheduleSEI{
 			ScheduleVO scheduleVo = new ScheduleVO();
 		    scheduleVo.setEventDate( sdf.format(curCal.getTime()) );
 		    scheduleVo.setEventStatus("01"); 
-		    scheduleVo.setExamUsrNm("abc");
+		    scheduleVo.setExamUsrNm("김경미");
 		    scheduleVo.setScheduleBatchCreateYn("Y");
 			
 			if( day == 2 || day == 3 || day == 5 || day == 6 ) {  // mon, tuesday, thursday, friday
@@ -151,20 +151,6 @@ public class ScheduleSVC implements ScheduleSEI{
 				scheduleVo.setEventEndTime("13:00");
 				this.insertSchedule(scheduleVo);
 				
-				if( day == 3 || day == 5) {
-					scheduleVo.setExamUsrNm("abc");
-
-					scheduleVo.setScheduleId(null);
-					scheduleVo.setEventStartTime("09:30");
-					scheduleVo.setEventEndTime("11:00");
-					this.insertSchedule(scheduleVo);
-					
-					scheduleVo.setScheduleId(null);
-					scheduleVo.setEventStartTime("11:00");
-					scheduleVo.setEventEndTime("12:30");
-					this.insertSchedule(scheduleVo);					
-				}
-				
 			}else if(day == 4) {  // wednesday
 				scheduleVo.setEventStartTime("10:00");
 				scheduleVo.setEventEndTime("12:00");
@@ -175,8 +161,6 @@ public class ScheduleSVC implements ScheduleSEI{
 				scheduleVo.setEventEndTime("14:00");
 				this.insertSchedule(scheduleVo);
 				
-			}else {
-				// do nothing
 			}
 			
 			curCal.add(Calendar.DAY_OF_WEEK, 1);

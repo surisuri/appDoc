@@ -1,5 +1,5 @@
 package com.lkssoft.appDoc.charge.svc;
-
+        
 import com.lkssoft.appDoc.com.vo.CommonVO;
 
 public class MedicalChargeVO extends CommonVO{

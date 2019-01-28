@@ -13,8 +13,8 @@
  		/*Schedule.selectListEvent 스케쥴 이벤트 목록을 조회한다. */
  		SELECT SCHEDULE_ID
         		   , DATE_FORMAT(EVENT_DATE, '%Y-%m-%d') AS EVENT_DATE
-        		   , EVENT_START_TIME 
-        		   , EVENT_END_TIME 
+        		   , time_format(EVENT_START_TIME, '%H:%i') AS EVENT_START_TIME  
+        		   , time_format(EVENT_END_TIME, '%H:%i') AS EVENT_END_TIME 
         		   , PATIENT_NAME
         		   , TREAT_DVS_CODE
         		   , (SELECT inspection_name
