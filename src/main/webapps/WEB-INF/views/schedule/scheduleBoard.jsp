@@ -90,7 +90,8 @@
                 // Create a jqxComboBox
                 $("#treatDvsCode").jqxComboBox({ selectedIndex: 0, source: dataAdapter, 
                 								  displayMember: "INSPECTION_NAME", valueMember: "INSPECTION_CODE", 
-                								  width: 270, height: 25});
+                								  width: 270, height: 30});
+
                 /*
                  * validator initialize
                  */
@@ -635,85 +636,95 @@
 		<!--  <div class="modal-header">
 			검사/치료 일정관리
 		</div>-->
-		<div class="modal-dialog modal-sm"  role="document">
+		<div class="modal-dialog modal-md"  role="document">
 		    <div class="modal-content">
 		  		<div class="modal-header">
 					심리실 예약관리<button type="button" class="close" data-dismiss="modal">&times;</button>
 				</div>
-		  		<div class="modal-body">
+		  		<div class="modal-body row">
 					<form id="scheduleForm" action="registerSchedule" method="post">
-						<div class="form-group">
-							<div class="form-row">
-								<span>
-									<label for="dateLable">날짜</label> 
-									<input class="form-control"
-										id="eventDate" name="eventDate" type="date"
-										aria-describedby="dateHelp" placeholder="enter Date">
-								</span>
-								<span>
-									<label for="startTimeLabel">시작</label> 
-									<input class="form-control" id="eventStartTime" name="eventStartTime"
-										type="time" size="7" aria-describedby="startTimeHelp"
-										placeholder="Enter startTime">
-								</span>
-								<span>
-									<label for="endTimeLabel">종료</label> <input
-										class="form-control" id="eventEndTime" name="eventEndTime"
-										type="time" aria-describedby="endTimeHelp"
-										placeholder="Enter endTime">
-								</span>							
+						<div class="form-row">
+							<div class="form-group col-md-4">
+								<label for="dateLable">날짜</label> 
+								<input class="form-control"
+									id="eventDate" name="eventDate" type="date"
+									aria-describedby="dateHelp" placeholder="enter Date">
+							</div>
+							<div class="form-group col-md-4">
+								<label for="startTimeLabel">시작</label> 
+								<input class="form-control" id="eventStartTime" name="eventStartTime"
+									type="time" size="7" aria-describedby="startTimeHelp"
+									placeholder="Enter startTime">
+							</div>
+							<div class="form-group col-md-4">
+								<label for="endTimeLabel">종료</label> <input
+									class="form-control" id="eventEndTime" name="eventEndTime"
+									type="time" aria-describedby="endTimeHelp"
+									placeholder="Enter endTime">
+							</div>							
+						</div>
+						<div class="form-row">
+							<div class="form-group col-md-6">
+								<label for="nameLabel">이름</label>
+								<input class="form-control"
+									id="patientName" name="patientName" type="text"
+									placeholder="input name">
+							</div>
+							<div class="form-group col-md-6">
+								<label for="inspectionLabel">검사/치료</label>
+								<div id="treatDvsCode" name="treatDvsCode"></div> 
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="nameLabel">이름</label> <input class="form-control"
-								id="patientName" name="patientName" type="text"
-								placeholder="input name">
-							<label for="inspectionLabel">검사/치료</label>
-							<div id="treatDvsCode" name="treatDvsCode"></div>
-						</div>
-						<div class="form-group">
-							<label for="doctorNameLabel">처방자 </label> <input
-								class="form-control" id="prescriberUsrNm" name="prescriberUsrNm"
-								type="text" placeholder="input doctorName">
-							<label for="pychologistNameLabel">검사자</label> <input
-								class="form-control" id="examUsrNm" name="examUsrNm"
-								type="text" placeholder="input pychologistName">
-						</div>
-						<div class="form-group">
-							<label for="simpleMsgCtntLabel">간단 메시지</label> <input
-								class="form-control" id="simpleMsgCtnt" name="simpleMsgCtnt"
-								type="text" placeholder="input remark">
-						</div>
-				        <div class="form-group">
-							<div class="form-row">
-								<input type="hidden" id='scheduleId' name='scheduleId' />
-								<input type="hidden" id='eventStatus' name='eventStatus'>
-								<input type="hidden" id='deleteYn' name='deleteYn'>
-									<span>
-									<button type="button" class="btn btn-success" id="registerSchedule">예약</button>
-								</span>
-								<span>
-									<button type="button" class="btn btn-warning" id="cancelSchedule">예약취소</button>
-								</span>
-								<sec:authorize access="hasAnyRole('ROLE_ADMIN')">
-									<span>
-										<button type="button" class="btn btn-danger" id="deleteSchedule">예약삭제</button>
-									</span>
-								</sec:authorize>
-								<span>
-									<button type="button" class="btn btn-primary" id="closeSchedule">닫기</button>
-								</span>		
+						<div class="form-row">
+							<div class="form-group col-md-12">
+								<label for="simpleMsgCtntLabel">간단 메시지</label> 
+								<input class="form-control" id="simpleMsgCtnt" name="simpleMsgCtnt"
+									type="text" placeholder="input remark">
 							</div>
 						</div>
+						<div class="form-row">
+							<div class="form-group col-md-6">
+								<label for="doctorNameLabel">처방자 </label> 
+								<input class="form-control" id="prescriberUsrNm" name="prescriberUsrNm"
+									type="text" placeholder="input doctorName">
+							</div>
+							<div class="form-group col-md-6">
+								<label for="pychologistNameLabel">검사자</label> <input
+									class="form-control" id="examUsrNm" name="examUsrNm"
+									type="text" placeholder="input pychologistName">
+							</div>
+						</div>
+						
 					</form>
-				</div> <!-- end of modal-body > 
+				</div> <!-- end of modal-body --> 
 				<div class="modal-footer">
-				</div>-->
-			</div>
+					<div class="form-row">
+				        <div class="form-group">
+							<input type="hidden" id='scheduleId' name='scheduleId' />
+							<input type="hidden" id='eventStatus' name='eventStatus'>
+							<input type="hidden" id='deleteYn' name='deleteYn'>
+							<span>
+								<button type="button" class="btn btn-success" id="registerSchedule">예약</button>
+							</span>
+							<span>
+								<button type="button" class="btn btn-warning" id="cancelSchedule">예약취소</button>
+							</span>
+							<sec:authorize access="hasAnyRole('ROLE_ADMIN')">
+								<span>
+									<button type="button" class="btn btn-danger" id="deleteSchedule">예약삭제</button>
+								</span>
+							</sec:authorize>
+							<span>
+								<button type="button" class="btn btn-primary" id="closeSchedule">닫기</button>
+							</span>		
+						</div>
+					</div>
+				</div>
+			</div> <!-- modal content  -->
 		</div>
 	</div>
  
-	<!-- 스케쥴 일괄등록	-->
+	<!-- 스케쥴 일괄등록	--> 
   <div id="scheduleBatch" class="modal fade" role="dialog" aria-hidden="true">
 		<div class="modal-dialog modal-sm"  role="document">
 		    <div class="modal-content">
@@ -753,9 +764,9 @@
 							</div>
 						</div>
 					</form>
-				</div> <!-- end of modal-body > 
+				</div> <!-- end of modal-body -->  
 				<div class="modal-footer">
-				</div>-->
+				</div>
 			</div>
 		</div>
 	</div>	 

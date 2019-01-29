@@ -28,7 +28,7 @@ public class ScheduleDAO extends AbstractDAO{
 	 * @throws Exception
 	 */
 	public Object updateSchedule(ScheduleVO scheculeVo) throws Exception{ 	
-	    return insert("Schedule.updateSchedule", scheculeVo);	
+	    return update("Schedule.updateSchedule", scheculeVo);	
 	}	
 	
 	/**
@@ -38,7 +38,7 @@ public class ScheduleDAO extends AbstractDAO{
 	 * @throws Exception
 	 */
 	public Object deleteSchedule(ScheduleVO scheduleVo) throws Exception{ 	
-	    return insert("Schedule.deleteSchedule", scheduleVo);	
+	    return delete("Schedule.deleteSchedule", scheduleVo);	
 	}
 	
 	/**

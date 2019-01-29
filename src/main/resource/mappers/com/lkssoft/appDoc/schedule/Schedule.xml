@@ -87,7 +87,7 @@
 	
     <delete id="deleteSchedule" parameterType="com.lkssoft.appDoc.schedule.svc.ScheduleVO">
 	   UPDATE schedule
-          SET DELETE_YN = IFNULL(#{deleteYn}, 'N')	
+          SET DELETE_YN = IFNULL(#{deleteYn}, 'Y')	
         WHERE SCHEDULE_ID = #{scheduleId}
     </delete>   
        
