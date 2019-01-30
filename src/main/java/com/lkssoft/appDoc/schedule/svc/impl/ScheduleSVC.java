@@ -74,6 +74,7 @@ public class ScheduleSVC implements ScheduleSEI{
 	}
 
 	/**
+	 * 예약을 등록한다
 	 * 
 	 * @param scheduleVo
 	 * @return Object
@@ -94,6 +95,7 @@ public class ScheduleSVC implements ScheduleSEI{
 		}
 			
 	    scheduleVo.setCreateUsrId( SecurityContextHolder.getContext().getAuthentication().getName() );
+	    scheduleVo.setUpdateUsrId(SecurityContextHolder.getContext().getAuthentication().getName() );
 	    scheduleVo.setDeleteYn("N");
 		
 		return scheduleDAO.insertSchedule(scheduleVo);

@@ -118,6 +118,7 @@
                 		]
                 });
                 
+                // 입력 element validation check 후 처리
                 $('#scheduleForm').on('validationSuccess', function (event) {  
 			    		fn_register();
 				});                
@@ -156,7 +157,7 @@
 					navLinks : true, // can click day/week names to navigate views
 					selectable : true,
 					selectHelper : true,
-					height: $(window).height()*0.94,
+					height: $(window).height()*0.90,
 					select : function(start, end) {
 						
 						if( '${adminAccess}' == 'true' ){ 
@@ -298,14 +299,12 @@
 				// 권한에 따른 예약관리 화면 visible 여부 세팅
 				if( '${adminAccess}' == 'false' ){
 					$('#eventDate').prop('readonly', true);
-					$('#eventStartTime').prop('readonly', true);
-					$('#eventEndTime').prop('readonly', true);
-					$('#examUsrNm').prop('readonly', true);
+					$('#eventStartTime').prop('readonly', false);
+					$('#eventEndTime').prop('readonly', false);
 				}else{
 					$('#eventDate').prop('readonly', false);
 					$('#eventStartTime').prop('readonly', false);
 					$('#eventEndTime').prop('readonly', false);
-					$('#examUsrNm').prop('readonly', false);				
 				}
 			});  // end of ready
 		
@@ -343,7 +342,7 @@
 					alert(data.result);  // jax alarm으로 변경고려...
 				},
 				complete : function(jqXHR) {
-					
+					// do nothig
 				}
 			});
 		}
@@ -694,15 +693,14 @@
 									type="text" placeholder="input pychologistName">
 							</div>
 						</div>
-						
+						<input type="hidden" id='scheduleId' name='scheduleId' />
+						<input type="hidden" id='eventStatus' name='eventStatus'>
+						<input type="hidden" id='deleteYn' name='deleteYn'>
 					</form>
 				</div> <!-- end of modal-body --> 
 				<div class="modal-footer">
 					<div class="form-row">
 				        <div class="form-group">
-							<input type="hidden" id='scheduleId' name='scheduleId' />
-							<input type="hidden" id='eventStatus' name='eventStatus'>
-							<input type="hidden" id='deleteYn' name='deleteYn'>
 							<span>
 								<button type="button" class="btn btn-success" id="registerSchedule">예약</button>
 							</span>

@@ -32,9 +32,9 @@ public class ScheduleController {
 	 * @return ModelAndView
 	 * @throws Exception
 	 */
-    @RequestMapping(value="/registerSchedule", method=RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody ScheduleVO registerSchedule(HttpServletRequest req, ScheduleVO scheduleVo) throws Exception{
-    		ScheduleVO result = new ScheduleVO();
+	@RequestMapping(value = "/registerSchedule", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody ScheduleVO registerSchedule(HttpServletRequest req, ScheduleVO scheduleVo) throws Exception {
+		ScheduleVO result = new ScheduleVO();
     		try {
 	    		if ( StringUtils.isEmpty( scheduleVo.getScheduleId() )) {
 	    			scheduleSEI.insertSchedule(scheduleVo);
