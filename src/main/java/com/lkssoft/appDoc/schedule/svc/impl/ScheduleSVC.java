@@ -143,7 +143,7 @@ public class ScheduleSVC implements ScheduleSEI{
 		    scheduleVo.setExamUsrNm("김경미");
 		    scheduleVo.setScheduleBatchCreateYn("Y");
 			
-			if( day == 2 || day == 3 || day == 5 || day == 6 ) {  // mon, tuesday, thursday, friday
+			if( day == 2 || day == 3 || day == 4 || day == 5 || day == 6 ) {  // mon, tuesday, thursday, friday
 				scheduleVo.setEventStartTime("09:00");
 				scheduleVo.setEventEndTime("11:00");
 				this.insertSchedule(scheduleVo);
@@ -152,17 +152,6 @@ public class ScheduleSVC implements ScheduleSEI{
 				scheduleVo.setEventStartTime("11:00");
 				scheduleVo.setEventEndTime("13:00");
 				this.insertSchedule(scheduleVo);
-				
-			}else if(day == 4) {  // wednesday
-				scheduleVo.setEventStartTime("10:00");
-				scheduleVo.setEventEndTime("12:00");
-				this.insertSchedule(scheduleVo);
-				
-				scheduleVo.setScheduleId(null);
-				scheduleVo.setEventStartTime("12:00");
-				scheduleVo.setEventEndTime("14:00");
-				this.insertSchedule(scheduleVo);
-				
 			}
 			
 			curCal.add(Calendar.DAY_OF_WEEK, 1);

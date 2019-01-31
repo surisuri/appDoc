@@ -157,7 +157,7 @@
 					navLinks : true, // can click day/week names to navigate views
 					selectable : true,
 					selectHelper : true,
-					height: $(window).height()*0.90,
+					//height: $(window).height()*0.90,
 					select : function(start, end) {
 						
 						if( '${adminAccess}' == 'true' ){ 
@@ -272,16 +272,18 @@
 					},
 					eventRender: function(event, element) {
 						// 시간 포맷 변경
-						element.find('.fc-time').html( event.startTime + '~' + event.endTime); 
+						element.find('.fc-time').html("<span style='font-size:14px'>"+ event.startTime + '~' + event.endTime + "</span>"); 
 						
-						// 간단 메시지 
-						var msg = event.simpleMsgCtnt;
-						if( msg != 'undefined' && msg != null 
-								&& msg != ''){
-				      		element.find('.fc-title').append("<br/>" + msg);
-						}else{
-							element.find('.fc-title').append("<br/>" + '-');
-						}
+						if (event.title) {
+							element.find("span.fc-title").html("<span style='font-size:14px'>" + event.title +"</span>");
+
+							// 간단 메시지 
+							var msg = event.simpleMsgCtnt;
+							if( msg != 'undefined' && msg != null 
+									&& msg != ''){
+					      		element.find('.fc-title').append("<br/>" + "<span style='font-size:14px'>"+msg+"</span>");
+							}
+		                }
 						
 						/* popover
 						var content = event.treatDvsName;
