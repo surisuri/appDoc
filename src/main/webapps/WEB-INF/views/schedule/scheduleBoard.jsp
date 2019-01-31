@@ -294,8 +294,12 @@
 							placement:'top',
 							container:'body'
 						});
-				    } 					
-					
+				    },
+				    eventAfterRender: function(event, element, view){
+				    	if(event.treatDvsCode == '19'){  // 예약불가
+				            element.css('background-color', '#800000');
+				    	}
+				    }
 				}); // end of fullcalendar 
 				
 				// 권한에 따른 예약관리 화면 visible 여부 세팅
