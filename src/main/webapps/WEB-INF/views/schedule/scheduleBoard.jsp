@@ -272,20 +272,20 @@
 					},
 					eventRender: function(event, element) {
 						// 시간 포맷 변경
-						element.find('.fc-time').html("<span style='font-size:14px'>"+ event.startTime + '~' + event.endTime + "</span>"); 
+						element.find('.fc-time').html("<span style='font-size:12px'>"+ event.startTime + '~' + event.endTime + "</span>"); 
 						
 						if (event.title) {
-							element.find("span.fc-title").html("<span style='font-size:14px'>" + event.title +"</span>");
+							element.find("span.fc-title").html("<span style='font-size:12px'>" + event.title +"</span>");
 
 							// 간단 메시지 
 							var msg = event.simpleMsgCtnt;
 							if( msg != 'undefined' && msg != null 
 									&& msg != ''){
-					      		element.find('.fc-title').append("<br/>" + "<span style='font-size:14px'>"+msg+"</span>");
+					      		element.find('.fc-title').append("<br/>" + "<span style='font-size:12px'>"+msg+"</span>");
 							}
 		                }
 						
-						/* popover
+						// popover
 						var content = event.treatDvsName;
 						element.popover({
 							title:event.patientName,
@@ -293,7 +293,7 @@
 							trigger:'hover',
 							placement:'top',
 							container:'body'
-						});*/
+						});
 				    } 					
 					
 				}); // end of fullcalendar 
