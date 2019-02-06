@@ -76,7 +76,7 @@
 				 */
                 var source =
                 {
-                	    type: 'POST',
+                	type: 'POST',
                     datatype: "json",
                     datafields: [
                         { name: 'INSPECTION_CODE' },
@@ -157,7 +157,7 @@
 					navLinks : true, // can click day/week names to navigate views
 					selectable : true,
 					selectHelper : true,
-					//height: $(window).height()*0.90,
+
 					select : function(start, end) {
 						
 						if( '${adminAccess}' == 'true' ){ 
@@ -177,16 +177,17 @@
 							
 							$('#calendar').fullCalendar('unselect');
 							
-							$('#scheduleMng').modal('show');						
+							$('#scheduleMng').modal('show');
 						}
 					},
+					
 					dayClick : function(date, jsEvent, view) {
 						if( '${adminAccess}' == 'true' ){ 
 							
 							fn_clearScheduleMng(); // initialize
 							
 							$('#eventDate').val( date.format() );
-							$('#scheduleMng').modal('show');	
+							$('#scheduleMng').modal('show');
 						}
 					},
 					eventClick : function(calEvent, jsEvent, view) {
@@ -205,6 +206,14 @@
 							$('#simpleMsgCtnt').val(calEvent.simpleMsgCtnt);
 							
 							$('#scheduleMng').modal('show');
+							$('#scheduleMng').on('shown.bs.modal', function(){
+								// 예약 전일 경우 "예약취소"버튼 비활성화
+								if( calEvent.eventStatus == "01" ){
+									$("#cancelSchedule").hide();
+								}else{
+									$("#cancelSchedule").show();
+								}
+							});
 						}
 					},
 					editable : isEditable,
@@ -237,7 +246,7 @@
 												var bgcolor = 'white';
 												var borderColor = 'gray';
 												var textcolor = 'black';
-												if(r.EVENT_STATUS == '02'){
+												if(r.EVENT_STATUS == '02'){  // 01:예약전, 02:예약중
 													bgcolor = 'green';
 													textcolor = 'white';
 												}
@@ -256,6 +265,7 @@
 													examUsrNm : r.EXAM_USR_NM ,		
 													prescriberUsrNm : r.PRESCRIBER_USR_NM ,	
 													simpleMsgCtnt : r.SIMPLE_MSG_CTNT,
+													eventStatus : r.EVENT_STATUS,
 													color : bgcolor,
 													textColor: textcolor,
 													borderColor:borderColor
@@ -316,7 +326,7 @@
 		
 		// 등록버튼 클릭 시 처리
 		function fn_register() {
-			$('#eventStatus').val('01'); // 예약
+			$('#eventStatus').val('02'); // 예약
 			$('#deleteYn').val('N');
 	
 			var formSerialized = $('#scheduleForm').serialize();
