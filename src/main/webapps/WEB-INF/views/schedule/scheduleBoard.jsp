@@ -56,6 +56,7 @@
     <script type="text/javascript" src="${jqwidjets}/jqwidgets/jqxdata.js"></script>
 	<script type="text/javascript" src="${jqwidjets}/jqwidgets/jqxscrollbar.js"></script>
 	<script type="text/javascript" src="${jqwidjets}/jqwidgets/jqxbuttons.js"></script>
+    <script type="text/javascript" src="${jqwidjets}/jqwidgets/jqxwindow.js"></script>
 	<script type="text/javascript" src="${jqwidjets}/jqwidgets/jqxscrollbar.js"></script>
 	<script type="text/javascript" src="${jqwidjets}/jqwidgets/jqxpanel.js"></script>
 	<script type="text/javascript" src="${jqwidjets}/jqwidgets/jqxlistbox.js"></script>
@@ -128,6 +129,7 @@
 				});
 				
 				$("#cancelSchedule").on('click', function() {
+					//$('#eventWindow').jqxWindow('open');
 					fn_calcel();
 				});
 				$('#deleteSchedule').on('click', function(){
@@ -139,7 +141,7 @@
 		
 				var isEditable = false;
 				if( '${adminAccess}' == 'true' ){ 
-					isEditable =false;  // 추후에 drag & drop -> update 기능 보완시 'true'로 변경 필요함
+					isEditable = true;  // 추후에 drag & drop -> update 기능 보완시 'true'로 변경 필요함
 				}else{
 					isEditable = false;
 				}
@@ -191,8 +193,8 @@
 						}
 					},
 					eventClick : function(calEvent, jsEvent, view) {
+						
 						if (calEvent.id) {
-							
 							fn_clearScheduleMng(); // initialize							
 							
 							$('#scheduleId').val(calEvent.id);
@@ -207,12 +209,35 @@
 							
 							$('#scheduleMng').modal('show');
 							$('#scheduleMng').on('shown.bs.modal', function(){
+								
 								// 예약 전일 경우 "예약취소"버튼 비활성화
 								if( calEvent.eventStatus == "01" ){
 									$("#cancelSchedule").hide();
 								}else{
 									$("#cancelSchedule").show();
 								}
+							
+								// 일반 사용자는 "예약불가 event" 클릭시 예약/예약수정/예약삭제 불가 -> 모든 버튼 비활성화
+								// 다른 사용자가 예약한 event 클릭시 예약/예약수정/예약삭제 불가 -> 모든 버튼 비활성화
+								if(isEditable == false){
+									
+									if( (calEvent.treatDvsCode == '19') ||
+										(calEvent.updateUsrId != null & calEvent.updateUsrId != 'undefined' && calEvent.updateUsrId != '${user.username}')
+									){
+										$("#cancelSchedule").hide();
+										$("#registerSchedule").hide();
+										$("#deleteSchedule").hide();
+									}else{
+										$("#cancelSchedule").show();
+										$("#registerSchedule").show();
+										$("#deleteSchedule").show();
+									}
+								}else{
+									$("#cancelSchedule").show();
+									$("#registerSchedule").show();
+									$("#deleteSchedule").show();
+								}
+								
 							});
 						}
 					},
@@ -266,6 +291,7 @@
 													prescriberUsrNm : r.PRESCRIBER_USR_NM ,	
 													simpleMsgCtnt : r.SIMPLE_MSG_CTNT,
 													eventStatus : r.EVENT_STATUS,
+													updateUsrId : r.UPDATE_USR_ID,
 													color : bgcolor,
 													textColor: textcolor,
 													borderColor:borderColor
@@ -321,7 +347,13 @@
 					$('#eventDate').prop('readonly', false);
 					$('#eventStartTime').prop('readonly', false);
 					$('#eventEndTime').prop('readonly', false);
-				}
+				};
+				
+				/* alarm  
+				addEventListeners();
+		        createElements();
+		        $("#confirmWindow").css('visibility', 'hidden'); */
+		        
 			});  // end of ready
 		
 		// 등록버튼 클릭 시 처리
@@ -567,6 +599,61 @@
 		    }
 		    return len;
 		}
+		
+		/* alert */
+      /*   function capitaliseFirstLetter(string) {
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        } 
+        function displayEvent(event) {
+           var eventData = 'Event: ' + capitaliseFirstLetter(event.type);
+             if (event.type === 'moved') {
+                eventData += ', X: ' + event.args.x + ', Y: ' + event.args.y;
+            } 
+            if (event.type === 'close') {
+                eventData += ', Dialog result: ';
+                if (event.args.dialogResult.OK) {
+                    eventData += 'OK';
+                } else if (event.args.dialogResult.Cancel) {
+                    eventData += 'Cancel';
+                } else {
+                    eventData += 'None';
+                }
+            }
+            $('#events').jqxPanel('prepend', '<div style="margin-top: 5px;">' + eventData + '</div>'); 
+        }
+        function addEventListeners() {
+            //Closed event
+            $('#eventWindow').on('close', function (event) {
+                displayEvent(event);
+            });
+            //Dragstarted event
+            $('#eventWindow').on('moved', function (event) {
+                displayEvent(event);
+            });
+            //Open event
+            $('#eventWindow').on('open', function (event) {
+                displayEvent(event);
+            }); 
+            $('#showWindowButton').mousedown(function () {
+                $('#eventWindow').jqxWindow('open');
+            }); 
+        }
+        function createElements() {
+            var jqxWidget = $('#confirmWindow');
+            var offset = jqxWidget.offset();
+            $('#eventWindow').jqxWindow({
+                position: { x: offset.left + 50, y: offset.top + 50} ,
+                maxHeight: 100, maxWidth: 280, minHeight: 30, minWidth: 250, height: 100, width: 270,
+                resizable: false, isModal: true, modalOpacity: 0.3,
+                okButton: $('#ok'), cancelButton: $('#cancel'),
+                initContent: function () {
+                    $('#ok').jqxButton({ width: '65px' });
+                    $('#cancel').jqxButton({ width: '65px' });
+                    $('#ok').focus();
+                }
+            });
+        }*/
+                
 	</script>
 	
 	<style>
@@ -785,6 +872,26 @@
 		</div>
 	</div>	 
  
+ 	<!-- start of alert  
+    <div style="visibility: hidden;" id="confirmWindow">
+        <div style="width: 100%; height: 300px; border: 0px solid #ccc; margin-top: 10px;"
+            id="mainDemoContainer">
+        </div>
+        <div id="eventWindow">
+            <div>확인</div>
+            <div>
+                <div id="comment"></div>
+                <div>
+	                <div style="float: right; margin-top: 15px;">
+	                    <input type="button" id="ok" value="OK" style="margin-right: 10px" />
+	                    <input type="button" id="cancel" value="Cancel" />
+	                </div>
+                </div>
+            </div>
+        </div>
+    </div> -->
+
+ 	<!-- end of alarm -->
 		<!-- jQuery 
 	    <script src="${admin}/vendor/jquery/jquery.min.js"></script>-->
 	

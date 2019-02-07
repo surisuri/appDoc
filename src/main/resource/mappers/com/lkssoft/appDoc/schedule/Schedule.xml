@@ -50,7 +50,6 @@
             		   , DELETE_YN
             		   , CREATE_DT
             		   , CREATE_USR_ID
-            		   , UPDATE_USR_ID
                    )
             VALUES (#{scheduleId}
                     , #{eventDate}
@@ -65,7 +64,6 @@
                     , IFNULL(#{deleteYn}, 'N')
                     , now()
                     , #{createUsrId}
-                    , #{updateUsrId}
                    )  
     </insert>
     

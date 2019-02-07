@@ -52,12 +52,12 @@ public class ScheduleSVC implements ScheduleSEI{
 	@Override
 	public Object cancelSchedule(ScheduleVO scheduleVo) throws Exception {
 		
-	    	scheduleVo.setEventStatus("01"); 
+	    scheduleVo.setEventStatus("01"); 
 	    scheduleVo.setPatientName(null);
 	    scheduleVo.setPrescriberUsrNm(null);
 	    scheduleVo.setSimpleMsgCtnt(null);
 	    scheduleVo.setDeleteYn("N");
-		scheduleVo.setUpdateUsrId(SecurityContextHolder.getContext().getAuthentication().getName());
+		scheduleVo.setUpdateUsrId(null);
 	    
 		return scheduleDAO.updateSchedule(scheduleVo);
 	}
