@@ -139,11 +139,11 @@
 					fn_close();
 				});
 		
-				var isEditable = false;
+				var isAdminAccess = false;
 				if( '${adminAccess}' == 'true' ){ 
-					isEditable = true;  // 추후에 drag & drop -> update 기능 보완시 'true'로 변경 필요함
+					isAdminAccess = true;  // 추후에 drag & drop -> update 기능 보완시 'true'로 변경 필요함
 				}else{
-					isEditable = false;
+					isAdminAccess = false;
 				}
 				$('#calendar').fullCalendar({
 					header : {
@@ -192,6 +192,7 @@
 							$('#scheduleMng').modal('show');
 						}
 					},
+					
 					eventClick : function(calEvent, jsEvent, view) {
 						
 						if (calEvent.id) {
@@ -219,10 +220,13 @@
 							
 								// 일반 사용자는 "예약불가 event" 클릭시 예약/예약수정/예약삭제 불가 -> 모든 버튼 비활성화
 								// 다른 사용자가 예약한 event 클릭시 예약/예약수정/예약삭제 불가 -> 모든 버튼 비활성화
-								if(isEditable == false){
+								if(isAdminAccess == false){  //일반사용자
 									
 									if( (calEvent.treatDvsCode == '19') ||
-										(calEvent.updateUsrId != null & calEvent.updateUsrId != 'undefined' && calEvent.updateUsrId != '${user.username}')
+										(calEvent.updateUsrId != null && 
+										 calEvent.updateUsrId != 'undefined' &&
+										 calEvent.updateUsrId != '' &&
+										 calEvent.updateUsrId != '${user.username}')
 									){
 										$("#cancelSchedule").hide();
 										$("#registerSchedule").hide();
@@ -232,6 +236,7 @@
 										$("#registerSchedule").show();
 										$("#deleteSchedule").show();
 									}
+								
 								}else{
 									$("#cancelSchedule").show();
 									$("#registerSchedule").show();
@@ -241,7 +246,7 @@
 							});
 						}
 					},
-					editable : isEditable,
+					editable : isAdminAccess,
 					eventLimit : true, // allow "more" link when too many events
 					events : function(start, end, timezone, callback) {
 						
