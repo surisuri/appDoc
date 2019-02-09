@@ -381,7 +381,11 @@
 					if (data.result == 'suc') {
 						alert('예약이 저장되었습니다.'); // jqx alarm으로 변경고려...
 					}
-     
+				},
+				error : function(data) {
+					alert(data.result);  // jax alarm으로 변경고려...
+				},
+				complete : function(jqXHR) {
 					var sources = fn_search(g_start, g_end );
 					$('#calendar').fullCalendar('removeEventSource', sources);
 					$('#calendar').fullCalendar('refetchEvents');
@@ -389,13 +393,6 @@
 					$('#calendar').fullCalendar('refetchEvents');
 					
 					$('#scheduleMng').modal('hide');
-
-				},
-				error : function(data) {
-					alert(data.result);  // jax alarm으로 변경고려...
-				},
-				complete : function(jqXHR) {
-					// do nothig
 				}
 			});
 		}
@@ -471,7 +468,11 @@
 					if (data.result == 'suc') {
 						alert('예약이 취소되었습니다.'); // jqx alarm으로 변경고려...
 					}
-     
+				},
+				error : function(data) {
+					alert(data.result);  // jax alarm으로 변경고려...
+				},
+				complete : function(jqXHR) {
 					var sources = fn_search(g_start, g_end );
 					$('#calendar').fullCalendar('removeEventSource', sources);
 					$('#calendar').fullCalendar('refetchEvents');
@@ -479,12 +480,6 @@
 					$('#calendar').fullCalendar('refetchEvents');
 					
 					$('#scheduleMng').modal('hide');
-
-				},
-				error : function(data) {
-					alert(data.result);  // jax alarm으로 변경고려...
-				},
-				complete : function(jqXHR) {
 				}
 			});			
 		}
@@ -572,7 +567,11 @@
 					if (data.result == 'suc') {
 						alert('일정이 삭제되었습니다.'); // jqx alarm으로 변경고려...
 					}
-     
+				},
+				error : function(data) {
+					alert(data.result);  // jax alarm으로 변경고려...
+				},
+				complete : function(jqXHR) {
 					var sources = fn_search(g_start, g_end );
 					$('#calendar').fullCalendar('removeEventSource', sources);
 					$('#calendar').fullCalendar('refetchEvents');
@@ -580,13 +579,6 @@
 					$('#calendar').fullCalendar('refetchEvents');
 					
 					$('#scheduleMng').modal('hide');
-
-				},
-				error : function(data) {
-					alert(data.result);  // jax alarm으로 변경고려...
-				},
-				complete : function(jqXHR) {
-					
 				}
 			});
 		}
