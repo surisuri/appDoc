@@ -361,14 +361,52 @@
 		        
 			});  // end of ready
 		
+		/**
+		 * Naver Cloud Platform SENS를 이용한 문자 메시지(단문 : 80bytes) 발송
+		 * - event : 예약, 예약변경, 예약취소
+		 * -SOP (Same Origin Policy에 의해 사용 불가)
+
+		function fn_sendSMS(){
+			$.ajax({
+				url : 'https://api-sens.ncloud.com/v1/sms/services/ncp:sms:kr:254210510886:appdoc/messages',
+				async : true,
+				type : 'POST',
+				dataType : 'json',
+				data : {
+					"type":"sms" ,
+					"contentType":"COMM",
+					"countryCode":"82",
+				    "from":"01071600229",
+				    "to":[
+				    	"01071600229"
+				    	],
+				    "content":"예약되었습니다."					
+				},
+				beforeSend : function(xhr) {
+					xhr.setRequestHeader("X-NCP-auth-key", "dxHSf4YQaowXfbVlDe1b");
+					xhr.setRequestHeader("X-NCP-service-secret", "bcc5c504f2444b6baa6ea74e230b2e15");
+					xhr.setRequestHeader("Content-Type", "application/json");
+				},
+				success : function(data) {
+					if (data.result == 'suc') {
+						console.log('SMS가 성공적으로 발송되었습니다.');
+					}
+				},
+				error : function(data) {
+					console.log(data.result);
+				},
+				complete : function(jqXHR) {
+					// do nothing
+				}
+			});			
+		}
+			 */	
 		// 등록버튼 클릭 시 처리
 		function fn_register() {
 			$('#eventStatus').val('02'); // 예약
 			$('#deleteYn').val('N');
 	
 			var formSerialized = $('#scheduleForm').serialize();
-	
-			//ajax 등록 처리 
 			$.ajax({
 				url : 'registerSchedule',
 				async : true,
@@ -379,11 +417,13 @@
 				},
 				success : function(data) {
 					if (data.result == 'suc') {
-						alert('예약이 저장되었습니다.'); // jqx alarm으로 변경고려...
+						alert('예약이 저장되었습니다.');
 					}
+					
+					//fn_sendSMS();
 				},
 				error : function(data) {
-					alert(data.result);  // jax alarm으로 변경고려...
+					alert(data.result);
 				},
 				complete : function(jqXHR) {
 					var sources = fn_search(g_start, g_end );
