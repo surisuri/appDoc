@@ -3,18 +3,23 @@
  
 <mapper namespace="MedicalCharge">
   
-    <select id="selectListMedicalCharge" resultType="map">
+    <select id="selectListMedicalCharge" parameterType="com.lkssoft.appDoc.charge.svc.MedicalChargeVO" 
+    										resultType="map">
  		/*MedicalCharge.selectListMedicalCharge 검사항목별 수가 목록을 조회한다. */
  		SELECT INSPECTION_CODE
  		       , INSPECTION_NAME
  		       , REMARK
  		       , CHARGE
  		       , TREAT_DVS_CD
-        		   , CREATE_DT
-        		   , CREATE_USR_ID 
-        		   , UPDATE_DT
-        		   , UPDATE_USR_ID
- 		  FROM medicalcharge
+       		   , CREATE_DT
+       		   , CREATE_USR_ID 
+       		   , UPDATE_DT
+       		   , UPDATE_USR_ID
+ 		  FROM medicalcharge	
+ 		WHERE 1=1
+ 		<if test="inspectionCode !=null and inspectionCode !=''">
+ 		  AND INSPECTION_CODE = #{inspectionCode}
+ 		</if>
      </select>
   
     <insert id="insertMedicalCharge" parameterType="com.lkssoft.appDoc.charge.svc.MedicalChargeVO">

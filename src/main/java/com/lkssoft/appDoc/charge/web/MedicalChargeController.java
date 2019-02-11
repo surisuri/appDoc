@@ -49,7 +49,8 @@ public class MedicalChargeController {
 	 */
 	@RequestMapping(value = "/selectListMedicalCharge", method = RequestMethod.POST)
 	public @ResponseBody List<Map<String, Object>> selectListMedicalCharge(HttpServletRequest req) throws Exception {
-		List<Map<String, Object>> results = medicalChargeSEI.selectListMedicalCharge();
+		MedicalChargeVO mdchargeVO = new MedicalChargeVO();
+		List<Map<String, Object>> results = medicalChargeSEI.selectListMedicalCharge(mdchargeVO);
 		return results;
 	}
 

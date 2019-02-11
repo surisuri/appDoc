@@ -14,12 +14,11 @@ public interface MedicalChargeSEI{
 	public Object mergeMedicalCharge(MedicalChargeVO medicalChargeVO) throws Exception;
 	
 	/**
-	 * 
-	 * @param searchVO
+	 * @param MedicalChargeVO medicalChargeVO
 	 * @return List<Map<String, Object>> 
 	 * @throws Exception
 	 */
-	public List<Map<String, Object>> selectListMedicalCharge() throws Exception;
+	public List<Map<String, Object>> selectListMedicalCharge(MedicalChargeVO medicalChargeVO) throws Exception;
 	
 	/**
 	 * 

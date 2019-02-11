@@ -1,5 +1,6 @@
 package com.lkssoft.appDoc.schedule.svc.impl;
 
+import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -8,15 +9,28 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestTemplate;
 
+import com.lkssoft.appDoc.charge.svc.MedicalChargeSEI;
+import com.lkssoft.appDoc.charge.svc.MedicalChargeVO;
 import com.lkssoft.appDoc.schedule.dao.ScheduleDAO;
 import com.lkssoft.appDoc.schedule.svc.ScheduleSEI;
+import com.lkssoft.appDoc.schedule.svc.ScheduleSMSVO;
 import com.lkssoft.appDoc.schedule.svc.ScheduleVO;
 
 @Service
+@PropertySource({ "classpath:property/sms.properties" })
 public class ScheduleSVC implements ScheduleSEI{
 	
 	/**
@@ -25,6 +39,36 @@ public class ScheduleSVC implements ScheduleSEI{
 	@Resource(name="ScheduleDAO")
 	private ScheduleDAO scheduleDAO;
 
+	/**
+	 * mediacalcharge interface
+	 */
+	@Autowired
+	private MedicalChargeSEI medicalChargeSEI;
+	
+	@Value("${sms.NCPServiceId}")
+	private String serviceId;
+	
+	@Value("${sms.nCPAuthKey}")
+	private String nCPAuthKey;
+	
+	@Value("${sms.nCPServiceSecret}")
+	private String nCPServiceSecret; 
+	
+	@Value("${sms.type}")
+	private String type;
+
+	@Value("${sms.contentType}")
+	private String contentType;
+	
+	@Value("${sms.contryCode}")
+	private String countryCode;
+
+	@Value("${sms.from}")
+	private String from;
+
+	@Value("${sms.to}")
+	private List<String> to;
+	
 	/**
 	 * 
 	 * @param scheculeVo
@@ -156,6 +200,72 @@ public class ScheduleSVC implements ScheduleSEI{
 			
 			curCal.add(Calendar.DAY_OF_WEEK, 1);
 		}
+	}
+
+	/**
+	 * 담당자에게 SMS 문자를 전송한다 
+	 * 
+	 * @param scheduleVo 예약정보
+	 * @param boolean isDelete 예약취소 여부
+	 * @return String 
+	 */
+	@Override
+	public String sendSMS(ScheduleVO scheduleVo, boolean isDelete) throws Exception{
 		
+		String result = "success";
+		String uriTemp = "https://api-sens.ncloud.com/v1/sms/services/"
+						+serviceId
+						+"/messages";
+		URI uri = URI.create(uriTemp); 
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("X-NCP-auth-key", nCPAuthKey);
+		headers.add("X-NCP-service-secret", nCPServiceSecret);
+		headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
+		
+		// ScheduleSMSVO 세팅
+		ScheduleSMSVO smsVO = new ScheduleSMSVO();
+		smsVO.setType(type);
+		smsVO.setContentType(contentType);
+		smsVO.setCountryCode(countryCode);
+		smsVO.setFrom(from);
+		smsVO.setTo(to);
+	
+		StringBuffer strBuf = new StringBuffer();
+		if( isDelete == true) {
+			strBuf.append("[예약취소]\n");
+		}else {
+			if( "02".equals(scheduleVo.getOldEventStatus()) ) {
+				strBuf.append("[예약변경]\n");
+			}else {
+				strBuf.append("[예약]\n");
+			}
+		}
+		strBuf.append("날짜:").append(scheduleVo.getEventDate()+"\n");
+		strBuf.append("시간:").append(scheduleVo.getEventStartTime()+"\n");
+		strBuf.append("이름:").append(scheduleVo.getPatientName()+"\n");
+		
+		MedicalChargeVO mdVO = new MedicalChargeVO();
+		mdVO.setInspectionCode(scheduleVo.getTreatDvsCode());
+		List<Map<String, Object>> treatList = medicalChargeSEI.selectListMedicalCharge(mdVO);
+		if( treatList.get(0) != null ) {
+			strBuf.append("치료/검사:").append( treatList.get(0).get("INSPECTION_NAME") );
+		}else {
+			strBuf.append("치료/검사:").append("-");
+		}
+		
+		smsVO.setContent(strBuf.toString());
+		
+		// HttpEntity 
+		HttpEntity requestEntity = new HttpEntity(smsVO, headers);
+	
+		// RestTemplate
+		RestTemplate restTemplate = new RestTemplate();
+		try {
+			restTemplate.exchange(uri,HttpMethod.POST, requestEntity, ScheduleSMSVO.class);
+		}catch(RestClientException e) {
+			result = "fail";
+		}
+		
+		return result;
 	}
 }

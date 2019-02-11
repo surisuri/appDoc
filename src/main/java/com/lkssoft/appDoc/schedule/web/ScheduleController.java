@@ -7,9 +7,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.io.CopyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -30,35 +29,10 @@ import com.lkssoft.appDoc.schedule.svc.ScheduleVO;
 
 @EnableWebMvc
 @Controller
-@PropertySource({ "classpath:property/sms.properties" })
 public class ScheduleController {
      
 	@Autowired
 	private ScheduleSEI scheduleSEI;
-	
-	@Value("${sms.NCPServiceId}")
-	private String serviceId;
-	
-	@Value("${sms.nCPAuthKey}")
-	private String nCPAuthKey;
-	
-	@Value("${sms.nCPServiceSecret}")
-	private String nCPServiceSecret; 
-	
-	@Value("${sms.type}")
-	private String type;
-
-	@Value("${sms.contentType}")
-	private String contentType;
-	
-	@Value("${sms.contryCode}")
-	private String countryCode;
-
-	@Value("${sms.from}")
-	private String from;
-
-	@Value("${sms.to}")
-	private List<String> to;
 	
 	/**
 	 * 
@@ -71,50 +45,17 @@ public class ScheduleController {
 		ScheduleVO result = new ScheduleVO();
     		try {
 	    		
-    			// 
+    			// 예약 최초 등록은 담당자가 일괄 등록하거나, 개별 등록하므로 SMS 발송 불필요
     			if ( StringUtils.isEmpty( scheduleVo.getScheduleId() )) {
 	    			scheduleSEI.insertSchedule(scheduleVo);
 	    		
-	    		//
+	    		// 예약 등록/변경/삭제는 간호사가 수행하고 담당자에게 SMS 발송	
 	    		}else {
 
 	    			scheduleSEI.updateSchedule(scheduleVo);
 	    			result.setResult("suc");
 	    			
-	    			// SMS 전송
-	    			String uriTemp = "https://api-sens.ncloud.com/v1/sms/services/"
-	    							+serviceId
-	    							+"/messages";
-	    			URI uri = URI.create(uriTemp); 
-	    			HttpHeaders headers = new HttpHeaders();
-	    			headers.add("X-NCP-auth-key", nCPAuthKey);
-	    			headers.add("X-NCP-service-secret", nCPServiceSecret);
-	    			headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
-	    			
-	    			// ScheduleSMSVO 세팅
-	    			ScheduleSMSVO smsVO = new ScheduleSMSVO();
-	    			smsVO.setType(type);
-	    			smsVO.setContentType(contentType);
-	    			smsVO.setCountryCode(countryCode);
-	    			smsVO.setFrom(from);
-	    			smsVO.setTo(to);
-	    			/*
-	    			List<String> to = new ArrayList<String>();
-	    			to.add(new String("01071600229"));
-	    			smsVO.setTo(to);
-	    			*/
-	    			smsVO.setContent("예약되었습니다.");
-	    			
-	    			// HttpEntity 
-	    			HttpEntity requestEntity = new HttpEntity(smsVO, headers);
-
-	    			// RestTemplate
-	    			RestTemplate restTemplate = new RestTemplate();
-	    			try {
-	    				restTemplate.exchange(uri,HttpMethod.POST, requestEntity, ScheduleSMSVO.class);
-	    			}catch(RestClientException e) {
-	    				result.setResult(e.toString());
-	    			}
+	    			scheduleSEI.sendSMS(scheduleVo, false);  // 예약, 예약변경 SMS 발송
 	    		}
 	    		
 	    	}catch(Exception e) {
@@ -134,9 +75,12 @@ public class ScheduleController {
     public @ResponseBody ScheduleVO cancelSchedule(HttpServletRequest req, ScheduleVO scheduleVo) throws Exception{
     		ScheduleVO result = new ScheduleVO();
     		try {
+    			String name = scheduleVo.getPatientName();
     			scheduleSEI.cancelSchedule(scheduleVo);
-	    		
 	    		result.setResult("suc");
+	    		
+	    		scheduleVo.setPatientName(name); // 환자이름 다시 세팅
+	    		scheduleSEI.sendSMS(scheduleVo, true); // 예약취소 SMS 발송
 	    	}catch(Exception e) {
 	    		result.setResult(e.toString());
 	    	}

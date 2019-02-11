@@ -32,14 +32,15 @@ public class MedicalChargeDAO extends AbstractDAO{
 	}
 	
 	/**
+	 * 검사종류 목록을 조회한다.
 	 * 
-	 * @param searchVO
-	 * @return
+	 * @param medicalChargeVO
+	 * @return List<Map<String, Object>>
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
-	public List<Map<String, Object>> selectListMedicalCharge() throws Exception{
-		List<Map<String, Object>> results = selectList("MedicalCharge.selectListMedicalCharge");
+	public List<Map<String, Object>> selectListMedicalCharge(MedicalChargeVO medicalChargeVO) throws Exception{
+		List<Map<String, Object>> results = selectList("MedicalCharge.selectListMedicalCharge", medicalChargeVO);
 		
 		return results;
 	}

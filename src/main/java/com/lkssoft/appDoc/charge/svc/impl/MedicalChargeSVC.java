@@ -39,9 +39,14 @@ public class MedicalChargeSVC implements MedicalChargeSEI{
 		}
 	}
 
+	/**
+	 * @param MedicalChargeVO medicalChargeVO
+	 * @return List<Map<String, Object>> 
+	 * @throws Exception
+	 */
 	@Override
-	public List<Map<String, Object>> selectListMedicalCharge() throws Exception {
-		return medicalChargeDAO.selectListMedicalCharge();
+	public List<Map<String, Object>> selectListMedicalCharge(MedicalChargeVO medicalChargeVO) throws Exception {
+		return medicalChargeDAO.selectListMedicalCharge(medicalChargeVO);
 	}
 
 	/**

@@ -53,4 +53,14 @@ public interface ScheduleSEI{
 	 * @exception Exception 
 	 */
 	public void insertBatchSchedule(String startDate, String endDate) throws Exception;	
+
+	/**
+	 * 담당자에게 SMS 문자를 전송하는 인터페이스 
+	 * 
+	 * @param scheduleVo 예약정보
+	 * @param boolean isDelete 예약취소 여부
+	 * @return String 
+	 */
+	public String sendSMS(ScheduleVO scheduleVo, boolean isDelete) throws Exception;
+
 }
