@@ -33,9 +33,6 @@
 	<!-- Custom CSS -->
 	<link href="${admin}/dist/css/sb-admin-2.css" rel="stylesheet">
 	
-	<!-- Morris Charts CSS 
-	<link href="${admin}/vendor/morrisjs/morris.css" rel="stylesheet">-->
-	
 	<!-- Custom Fonts -->
 	<link href="${admin}/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 	
@@ -61,7 +58,10 @@
 	<script type="text/javascript" src="${jqwidjets}/jqwidgets/jqxpanel.js"></script>
 	<script type="text/javascript" src="${jqwidjets}/jqwidgets/jqxlistbox.js"></script>
 	<script type="text/javascript" src="${jqwidjets}/jqwidgets/jqxcombobox.js"></script>
-	
+    <script type="text/javascript" src="${jqwidjets}/jqwidgets/jqxdatetimeinput.js"></script>
+    <script type="text/javascript" src="${jqwidjets}/jqwidgets/jqxcalendar.js"></script>
+    <script type="text/javascript" src="${jqwidjets}/jqwidgets/globalization/globalize.js"></script>
+    	
 	<sec:authorize access="hasAnyRole('ROLE_ADMIN')" var="adminAccess" />
 	
 	<script>
@@ -345,14 +345,23 @@
 				
 				// 권한에 따른 예약관리 화면 visible 여부 세팅
 				if( '${adminAccess}' == 'false' ){
-					$('#eventDate').prop('readonly', true);
+	                $("#eventDate").jqxDateTimeInput({ formatString: 'yyyy-MM-dd', width:'120px', disabled:true });
 					$('#eventStartTime').prop('readonly', false);
 					$('#eventEndTime').prop('readonly', false);
 				}else{
-					$('#eventDate').prop('readonly', false);
+	                $("#eventDate").jqxDateTimeInput({ formatString: 'yyyy-MM-dd', width:'120px', disabled:false });
 					$('#eventStartTime').prop('readonly', false);
 					$('#eventEndTime').prop('readonly', false);
 				};
+
+				// 예약 등록/변경 화면
+				$("#eventStartTime").jqxDateTimeInput({ formatString: 'HH:mm', showTimeButton: true, showCalendarButton: false, width:'120px' });
+				$("#eventEndTime").jqxDateTimeInput({ formatString: 'HH:mm', showTimeButton: true, showCalendarButton: false, width:'120px' });
+
+				// 스케쥴 일괄등록 화면
+				$("#startBatchDate").jqxDateTimeInput({ formatString: 'yyyy-MM-dd' });
+                $("#endBatchDate").jqxDateTimeInput({ formatString: 'yyyy-MM-dd'});
+
 			});  // end of ready
 		
 	
@@ -509,6 +518,13 @@
 			$('#scheduleBatch').modal('show');
 		}
 		
+		// 수가관리 화면전환
+		function fn_goMedicalChargeView(){
+			window.location.href = "<c:url value='medicalChargeView'/>";
+		}
+// <button type="button" class="btn btn-default btn-sm" onclick="fn_goMedicalChargeView();" >
+// <a href="<c:url value='medicalChargeView' />">  </a>
+		
 		// 스케쥴 배치작업 등록 
 		function fn_registerScheduleBatch(){
 			
@@ -595,59 +611,6 @@
 		    return len;
 		}
 		
-		/* alert */
-      /*   function capitaliseFirstLetter(string) {
-            return string.charAt(0).toUpperCase() + string.slice(1);
-        } 
-        function displayEvent(event) {
-           var eventData = 'Event: ' + capitaliseFirstLetter(event.type);
-             if (event.type === 'moved') {
-                eventData += ', X: ' + event.args.x + ', Y: ' + event.args.y;
-            } 
-            if (event.type === 'close') {
-                eventData += ', Dialog result: ';
-                if (event.args.dialogResult.OK) {
-                    eventData += 'OK';
-                } else if (event.args.dialogResult.Cancel) {
-                    eventData += 'Cancel';
-                } else {
-                    eventData += 'None';
-                }
-            }
-            $('#events').jqxPanel('prepend', '<div style="margin-top: 5px;">' + eventData + '</div>'); 
-        }
-        function addEventListeners() {
-            //Closed event
-            $('#eventWindow').on('close', function (event) {
-                displayEvent(event);
-            });
-            //Dragstarted event
-            $('#eventWindow').on('moved', function (event) {
-                displayEvent(event);
-            });
-            //Open event
-            $('#eventWindow').on('open', function (event) {
-                displayEvent(event);
-            }); 
-            $('#showWindowButton').mousedown(function () {
-                $('#eventWindow').jqxWindow('open');
-            }); 
-        }
-        function createElements() {
-            var jqxWidget = $('#confirmWindow');
-            var offset = jqxWidget.offset();
-            $('#eventWindow').jqxWindow({
-                position: { x: offset.left + 50, y: offset.top + 50} ,
-                maxHeight: 100, maxWidth: 280, minHeight: 30, minWidth: 250, height: 100, width: 270,
-                resizable: false, isModal: true, modalOpacity: 0.3,
-                okButton: $('#ok'), cancelButton: $('#cancel'),
-                initContent: function () {
-                    $('#ok').jqxButton({ width: '65px' });
-                    $('#cancel').jqxButton({ width: '65px' });
-                    $('#ok').focus();
-                }
-            });
-        }*/
                 
 	</script>
 	
@@ -682,13 +645,11 @@
 				<!-- /.dropdown -->
 				
 				<sec:authorize access="hasAnyRole('ROLE_ADMIN')">
-					<button type="button" class="btn btn-default btn-sm">
-						<span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
-						<a href='javascript:fn_popScheduleBatch();'>스케쥴 일괄등록</a>
+					<button type="button" class="btn btn-default btn-sm" onclick="fn_popScheduleBatch();">
+						<span class="glyphicon glyphicon-calendar" aria-hidden="true"></span> 스케쥴 일괄등록
 					</button>
-					<button type="button" class="btn btn-default btn-sm">
-						<span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>
-						<a href="<c:url value='medicalChargeView' />">수가관리</a>
+					<button type="button" class="btn btn-default btn-sm" onclick="fn_goMedicalChargeView();" >
+						<span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> 수가관리
 					</button>
 					<!-- <button type="button" class="btn btn-default btn-sm">
 						<span class="glyphicon glyphicon-usd" aria-hidden="true"></span>
@@ -730,9 +691,6 @@
 
 	<!-- 스케쥴 등록/수정 화면 	-->
   <div id="scheduleMng" class="modal fade" role="dialog" aria-hidden="true">
-		<!--  <div class="modal-header">
-			검사/치료 일정관리
-		</div>-->
 		<div class="modal-dialog modal-md"  role="document">
 		    <div class="modal-content">
 		  		<div class="modal-header">
@@ -743,21 +701,24 @@
 						<div class="form-row">
 							<div class="form-group col-md-4">
 								<label for="dateLable">날짜</label> 
-								<input class="form-control"
+								<div id="eventDate" name="eventDate"></div>
+								<!-- <input class="form-control"
 									id="eventDate" name="eventDate" type="date"
-									aria-describedby="dateHelp" placeholder="enter Date">
+									aria-describedby="dateHelp" placeholder="enter Date"> -->
 							</div>
 							<div class="form-group col-md-4">
 								<label for="startTimeLabel">시작</label> 
-								<input class="form-control" id="eventStartTime" name="eventStartTime"
+								<div id="eventStartTime" name="eventStartTime"></div>
+								<!-- <input class="form-control" id="eventStartTime" name="eventStartTime"
 									type="time" size="7" aria-describedby="startTimeHelp"
-									placeholder="Enter startTime">
+									placeholder="Enter startTime"> -->
 							</div>
 							<div class="form-group col-md-4">
-								<label for="endTimeLabel">종료</label> <input
-									class="form-control" id="eventEndTime" name="eventEndTime"
+								<label for="endTimeLabel">종료</label>
+								<div id="eventEndTime" name="eventEndTime"></div>
+								<!-- <input class="form-control" id="eventEndTime" name="eventEndTime"
 									type="time" aria-describedby="endTimeHelp"
-									placeholder="Enter endTime">
+									placeholder="Enter endTime"> -->
 							</div>							
 						</div>
 						<div class="form-row">
@@ -822,9 +783,9 @@
 	</div>
  
 	<!-- 스케쥴 일괄등록	--> 
-  <div id="scheduleBatch" class="modal fade" role="dialog" aria-hidden="true">
+    <div id="scheduleBatch" class="modal fade" role="dialog" aria-hidden="true">
 		<div class="modal-dialog modal-sm"  role="document">
-		    <div class="modal-content">
+		 	<div class="modal-content">
 		  		<div class="modal-header">
 					스케쥴 일괄등록<button type="button" class="close" data-dismiss="modal">&times;</button>
 				</div>
@@ -834,76 +795,52 @@
 							<div class="form-row">
 								<div class="col-mid-6">
 									<label for="dateLable">시작일자</label> 
-									<input class="form-control"
+									<div id="startBatchDate" name="startBatchDate"></div>
+									<!-- <input class="form-control"
 										id="startBatchDate" name="startBatchDate" type="date"
-										aria-describedby="dateHelp" placeholder="enter startDate">
+										aria-describedby="dateHelp" placeholder="enter startDate"> -->
 								</div>
 							</div>	
 							<div class="form-row">
 								<div class="col-mid-6">
-									<label for="dateLable">종료일자</label> 
-									<input class="form-control"
+									<label for="dateLable">종료일자</label>
+									<div id="endBatchDate" name="endBatchDate"></div> 
+									<!-- <input class="form-control"
 										id="endBatchDate" name="endbatchDate" type="date"
-										aria-describedby="dateHelp" placeholder="enter endDate">
+										aria-describedby="dateHelp" placeholder="enter endDate"> -->
 								</div>
 							</div>		
-						</div>
-				        <div class="form-group">
-							<div class="form-row">
-									<span>
-									<button type="button" class="btn btn-success" id="registerScheduleBatch" 
-											onclick="javascript:fn_registerScheduleBatch();">등록</button>
-								</span>
-								<span>
-									<button type="button" class="btn btn-warning" id="cancelScheduleBatch" 
-											onclick="javascript:fn_cancelScheduleBatch();">취소</button>
-								</span>
-							</div>
 						</div>
 					</form>
 				</div> <!-- end of modal-body -->  
 				<div class="modal-footer">
+			        <div class="form-group">
+						<div class="form-row">
+								<span>
+								<button type="button" class="btn btn-success" id="registerScheduleBatch" 
+										onclick="javascript:fn_registerScheduleBatch();">등록</button>
+							</span>
+							<span>
+								<button type="button" class="btn btn-warning" id="cancelScheduleBatch" 
+										onclick="javascript:fn_cancelScheduleBatch();">취소</button>
+							</span>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>	 
  
- 	<!-- start of alert  
-    <div style="visibility: hidden;" id="confirmWindow">
-        <div style="width: 100%; height: 300px; border: 0px solid #ccc; margin-top: 10px;"
-            id="mainDemoContainer">
-        </div>
-        <div id="eventWindow">
-            <div>확인</div>
-            <div>
-                <div id="comment"></div>
-                <div>
-	                <div style="float: right; margin-top: 15px;">
-	                    <input type="button" id="ok" value="OK" style="margin-right: 10px" />
-	                    <input type="button" id="cancel" value="Cancel" />
-	                </div>
-                </div>
-            </div>
-        </div>
-    </div> -->
-
  	<!-- end of alarm -->
-		<!-- jQuery 
-	    <script src="${admin}/vendor/jquery/jquery.min.js"></script>-->
-	
-		<!-- Bootstrap Core JavaScript -->
-		<script src="${admin}/vendor/bootstrap/js/bootstrap.min.js"></script>
-	
-		<!-- Metis Menu Plugin JavaScript -->
-		<script src="${admin}/vendor/metisMenu/metisMenu.min.js"></script>
-	
-		<!-- Morris Charts JavaScript 
-		<script src="${admin}/vendor/raphael/raphael.min.js"></script>
-		<script src="${admin}/vendor/morrisjs/morris.min.js"></script>
-		<script src="${admin}/data/morris-data.js"></script>-->
-	
-		<!-- Custom Theme JavaScript -->
-		<script src="${admin}/dist/js/sb-admin-2.js"></script>
+
+	<!-- Bootstrap Core JavaScript -->
+	<script src="${admin}/vendor/bootstrap/js/bootstrap.min.js"></script>
+
+	<!-- Metis Menu Plugin JavaScript -->
+	<script src="${admin}/vendor/metisMenu/metisMenu.min.js"></script>
+
+	<!-- Custom Theme JavaScript -->
+	<script src="${admin}/dist/js/sb-admin-2.js"></script>
 		
 	</body>
 
