@@ -18,7 +18,7 @@ public class ScheduleDAO extends AbstractDAO{
 	 * @exception Exception 
 	 */
 	public Object insertSchedule(ScheduleVO scheculeVo) throws Exception{ 	
-	    return insert("Schedule.insertSchedule", scheculeVo);	
+	    return insert("com.lkssoft.appDoc.schedule.dao.insertSchedule", scheculeVo);	
 	}
 	
 	/**
@@ -28,7 +28,7 @@ public class ScheduleDAO extends AbstractDAO{
 	 * @throws Exception
 	 */
 	public Object updateSchedule(ScheduleVO scheculeVo) throws Exception{ 	
-	    return update("Schedule.updateSchedule", scheculeVo);	
+	    return update("com.lkssoft.appDoc.schedule.dao.updateSchedule", scheculeVo);	
 	}	
 	
 	/**
@@ -38,7 +38,7 @@ public class ScheduleDAO extends AbstractDAO{
 	 * @throws Exception
 	 */
 	public Object deleteSchedule(ScheduleVO scheduleVo) throws Exception{ 	
-	    return update("Schedule.deleteSchedule", scheduleVo);	
+	    return update("com.lkssoft.appDoc.schedule.dao.deleteSchedule", scheduleVo);	
 	}
 	
 	/**
@@ -47,7 +47,7 @@ public class ScheduleDAO extends AbstractDAO{
 	 * @throws Exception
 	 */
 	public String nextSequeceNumber() throws Exception{
-		return (String)selectOne("Schedule.nextSequeceNumber");
+		return (String)selectOne("com.lkssoft.appDoc.schedule.dao.nextSequeceNumber");
 	}
 	
 	/**
@@ -58,7 +58,7 @@ public class ScheduleDAO extends AbstractDAO{
 	 */
 	@SuppressWarnings("unchecked")
 	public List<Map<String, Object>> selectListEvent(ScheduleVO searchVO) throws Exception{
-		List<Map<String, Object>> results = selectList("Schedule.selectListEvent", searchVO);
+		List<Map<String, Object>> results = selectList("com.lkssoft.appDoc.schedule.dao.selectListEvent", searchVO);
 		
 		return results;
 	}

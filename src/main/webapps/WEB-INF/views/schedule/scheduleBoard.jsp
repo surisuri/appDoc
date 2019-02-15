@@ -346,19 +346,16 @@
 				// 권한에 따른 예약관리 화면 visible 여부 세팅
 				if( '${adminAccess}' == 'false' ){
 	                $("#eventDate").jqxDateTimeInput({ formatString: 'yyyy-MM-dd', width:'120px', disabled:true });
-					$('#eventStartTime').prop('readonly', false);
-					$('#eventEndTime').prop('readonly', false);
 				}else{
 	                $("#eventDate").jqxDateTimeInput({ formatString: 'yyyy-MM-dd', width:'120px', disabled:false });
-					$('#eventStartTime').prop('readonly', false);
-					$('#eventEndTime').prop('readonly', false);
 				};
 
 				// 예약 등록/변경 화면
 				$("#eventStartTime").jqxDateTimeInput({ formatString: 'HH:mm', showTimeButton: true, showCalendarButton: false, width:'120px' });
 				$("#eventEndTime").jqxDateTimeInput({ formatString: 'HH:mm', showTimeButton: true, showCalendarButton: false, width:'120px' });
+                //$("#jqxWidget").jqxDateTimeInput({ width: '250px', height: '25px', formatString: 'T', showTimeButton: true, showCalendarButton: false});
 
-				// 스케쥴 일괄등록 화면
+                // 스케쥴 일괄등록 화면
 				$("#startBatchDate").jqxDateTimeInput({ formatString: 'yyyy-MM-dd' });
                 $("#endBatchDate").jqxDateTimeInput({ formatString: 'yyyy-MM-dd'});
 

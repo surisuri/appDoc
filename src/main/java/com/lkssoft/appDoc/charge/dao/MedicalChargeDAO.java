@@ -18,7 +18,7 @@ public class MedicalChargeDAO extends AbstractDAO{
 	 * @exception Exception 
 	 */
 	public Object insertMedicalCharge(MedicalChargeVO medicalChargeVO) throws Exception{ 	
-	    return insert("MedicalCharge.insertMedicalCharge", medicalChargeVO);	
+	    return insert("com.lkssoft.appDoc.charge.dao.insertMedicalCharge", medicalChargeVO);	
 	}
 	
 	/**
@@ -28,7 +28,7 @@ public class MedicalChargeDAO extends AbstractDAO{
 	 * @exception Exception 
 	 */
 	public Object updateMedicalCharge(MedicalChargeVO medicalChargeVO) throws Exception{ 	
-	    return insert("MedicalCharge.updateMedicalCharge", medicalChargeVO);	
+	    return insert("com.lkssoft.appDoc.charge.dao.updateMedicalCharge", medicalChargeVO);	
 	}
 	
 	/**
@@ -40,7 +40,7 @@ public class MedicalChargeDAO extends AbstractDAO{
 	 */
 	@SuppressWarnings("unchecked")
 	public List<Map<String, Object>> selectListMedicalCharge(MedicalChargeVO medicalChargeVO) throws Exception{
-		List<Map<String, Object>> results = selectList("MedicalCharge.selectListMedicalCharge", medicalChargeVO);
+		List<Map<String, Object>> results = selectList("com.lkssoft.appDoc.charge.dao.selectListMedicalCharge", medicalChargeVO);
 		
 		return results;
 	}
@@ -52,6 +52,6 @@ public class MedicalChargeDAO extends AbstractDAO{
 	 * @throws Exception
 	 */
 	public Object deleteMedicalCharge(MedicalChargeVO medicalChargeVO) throws Exception{
-		return delete("MedicalCharge.deleteMedicalCharge", medicalChargeVO);
+		return delete("com.lkssoft.appDoc.charge.dao.deleteMedicalCharge", medicalChargeVO);
 	}
 }
