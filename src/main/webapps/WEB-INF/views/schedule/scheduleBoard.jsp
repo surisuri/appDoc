@@ -353,7 +353,6 @@
 				// 예약 등록/변경 화면
 				$("#eventStartTime").jqxDateTimeInput({ formatString: 'HH:mm', showTimeButton: true, showCalendarButton: false, width:'120px' });
 				$("#eventEndTime").jqxDateTimeInput({ formatString: 'HH:mm', showTimeButton: true, showCalendarButton: false, width:'120px' });
-                //$("#jqxWidget").jqxDateTimeInput({ width: '250px', height: '25px', formatString: 'T', showTimeButton: true, showCalendarButton: false});
 
                 // 스케쥴 일괄등록 화면
 				$("#startBatchDate").jqxDateTimeInput({ formatString: 'yyyy-MM-dd' });
@@ -380,11 +379,12 @@
 				beforeSend : function(jqXHR) {
 				},
 				success : function(data) {
+					
 					if (data.result == 'suc') {
 						alert('예약이 저장되었습니다.');
+					}else{  // exception message 처리
+						alert( data.result );
 					}
-					
-					//fn_sendSMS();
 				},
 				error : function(data) {
 					alert(data.result);

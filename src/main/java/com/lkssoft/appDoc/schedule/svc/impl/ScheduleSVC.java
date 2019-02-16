@@ -84,6 +84,7 @@ public class ScheduleSVC implements ScheduleSEI{
 	    }else {
 	    		scheduleVo.setEventStatus("02"); 
 		}
+	    
 		return scheduleDAO.updateSchedule(scheduleVo);
 	}
 
@@ -141,7 +142,7 @@ public class ScheduleSVC implements ScheduleSEI{
 	    scheduleVo.setCreateUsrId( SecurityContextHolder.getContext().getAuthentication().getName() );
 	    scheduleVo.setUpdateUsrId(SecurityContextHolder.getContext().getAuthentication().getName() );
 	    scheduleVo.setDeleteYn("N");
-		
+	    
 		return scheduleDAO.insertSchedule(scheduleVo);
 	}
 

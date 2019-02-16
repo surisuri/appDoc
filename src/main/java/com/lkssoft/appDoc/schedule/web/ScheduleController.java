@@ -1,30 +1,22 @@
 package com.lkssoft.appDoc.schedule.web;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.io.CopyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.client.RestClientException;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.lkssoft.appDoc.com.vo.ResultsVO;
 import com.lkssoft.appDoc.schedule.svc.ScheduleSEI;
-import com.lkssoft.appDoc.schedule.svc.ScheduleSMSVO;
 import com.lkssoft.appDoc.schedule.svc.ScheduleVO;
 
 @EnableWebMvc
