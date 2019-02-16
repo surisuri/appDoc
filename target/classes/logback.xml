@@ -25,7 +25,6 @@
 	<logger name="org.springframework" level="INFO" />
 	<logger name="com.lkssoft.appDoc" level="DEBUG" />
 	<logger name="org.mybatis" level="DEBUG" additivity="false"/>
-	
     <logger name="jdbc" level="DEBUG" additivity="false" />
     <logger name="jdbc.sqlonly" level="DEBUG" additivity="false"/>
     <logger name="jdbc.sqltiming" level="DEBUG" additivity="false"/>
@@ -43,20 +42,5 @@
         <appender-ref ref="file" />
         <appender-ref ref="console" />
     </root>
-	
-    <!-- TRACE > DEBUG > INFO > WARN > ERROR, 대소문자 구분 안함 -->
-    <!-- profile 을 읽어서 appender 을 설정할수 있다.(phase별 파일을 안만들어도 되는 좋은 기능) 
-    <springProfile name="local">
-      <root level="DEBUG">
-        <appender-ref ref="file" />
-        <appender-ref ref="console" />
-      </root>
-    </springProfile>
-    <springProfile name="real">
-      <root level="INFO">
-        <appender-ref ref="file" />
-        <appender-ref ref="console" />
-      </root>
-    </springProfile>-->
     
 </configuration>

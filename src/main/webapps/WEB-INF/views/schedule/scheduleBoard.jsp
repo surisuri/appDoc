@@ -162,7 +162,7 @@
 
 					select : function(start, end) {
 						
-						if( '${adminAccess}' == 'true' ){ 
+						if( '${adminAccess}' == 'true' ){   // 로직 재확인 필요
 							fn_clearScheduleMng(); // initialize							
 							
 							var strStart = new String(start .format());
