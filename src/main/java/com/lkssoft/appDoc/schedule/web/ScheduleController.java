@@ -40,6 +40,7 @@ public class ScheduleController {
     			// 예약 최초 등록은 담당자가 일괄 등록하거나, 개별 등록하므로 SMS 발송 불필요
     			if ( StringUtils.isEmpty( scheduleVo.getScheduleId() )) {
 	    			scheduleSEI.insertSchedule(scheduleVo);
+	    			result.setResult("suc");
 	    		
 	    		// 예약 등록/변경/삭제는 간호사가 수행하고 담당자에게 SMS 발송	
 	    		}else {
