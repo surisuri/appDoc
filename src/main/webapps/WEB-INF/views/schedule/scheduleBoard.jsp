@@ -365,11 +365,13 @@
 		// 등록버튼 클릭 시 처리
 		function fn_register() {
 				 
-			$('#oldEventStatus').val( $('#eventStatus').val() );  // 예약 전, event 상태 -> 01: 예약 전, 02: 예약 중
-				 
-			$('#eventStatus').val('02'); // 예약
+			$('#oldEventStatus').val( $('#eventStatus').val() );  // ìì½ ì , event ìí -> 01: ìì½ ì , 02: ìì½ ì¤
+			 
+			$('#eventStatus').val('02'); // ìì½
 			$('#deleteYn').val('N');
 	
+			var formSerialized = $('#scheduleForm').serialize();
+				
 			$.ajax({
 				url : 'registerSchedule',
 				async : true,
