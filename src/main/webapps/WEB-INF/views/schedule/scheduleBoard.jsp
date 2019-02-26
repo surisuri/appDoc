@@ -345,9 +345,9 @@
 				
 				// 권한에 따른 예약관리 화면 visible 여부 세팅
 				if( '${adminAccess}' == 'false' ){
-	                $("#eventDate").jqxDateTimeInput({ formatString: 'yyyy-MM-dd', width:'120px', disabled:true });
+	                $("#eventDate").jqxDateTimeInput({ formatString: 'yyyy-MM-dd', width:'120px', readonly: true, showCalendarButton: false, allowNullDate:false, allowKeyboardDelete:false});
 				}else{
-	                $("#eventDate").jqxDateTimeInput({ formatString: 'yyyy-MM-dd', width:'120px', disabled:false });
+	                $("#eventDate").jqxDateTimeInput({ formatString: 'yyyy-MM-dd', width:'120px', readonly: false });
 				};
 
 				// 예약 등록/변경 화면
@@ -364,12 +364,18 @@
 		// 등록버튼 클릭 시 처리
 		function fn_register() {
 				 
+
+alert( $("#eventDate").val() );
+				
 			$('#oldEventStatus').val( $('#eventStatus').val() );  // 예약 전, event 상태 -> 01: 예약 전, 02: 예약 중
 				 
 			$('#eventStatus').val('02'); // 예약
 			$('#deleteYn').val('N');
 	
 			var formSerialized = $('#scheduleForm').serialize();
+alert( formSerialized );	
+return;
+
 			$.ajax({
 				url : 'registerSchedule',
 				async : true,
@@ -699,23 +705,14 @@
 							<div class="form-group col-md-4">
 								<label for="dateLable">날짜</label> 
 								<div id="eventDate" name="eventDate"></div>
-								<!-- <input class="form-control"
-									id="eventDate" name="eventDate" type="date"
-									aria-describedby="dateHelp" placeholder="enter Date"> -->
 							</div>
 							<div class="form-group col-md-4">
 								<label for="startTimeLabel">시작</label> 
 								<div id="eventStartTime" name="eventStartTime"></div>
-								<!-- <input class="form-control" id="eventStartTime" name="eventStartTime"
-									type="time" size="7" aria-describedby="startTimeHelp"
-									placeholder="Enter startTime"> -->
 							</div>
 							<div class="form-group col-md-4">
 								<label for="endTimeLabel">종료</label>
 								<div id="eventEndTime" name="eventEndTime"></div>
-								<!-- <input class="form-control" id="eventEndTime" name="eventEndTime"
-									type="time" aria-describedby="endTimeHelp"
-									placeholder="Enter endTime"> -->
 							</div>							
 						</div>
 						<div class="form-row">
