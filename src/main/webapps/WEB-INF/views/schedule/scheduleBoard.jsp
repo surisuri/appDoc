@@ -345,7 +345,8 @@
 				
 				// 권한에 따른 예약관리 화면 visible 여부 세팅
 				if( '${adminAccess}' == 'false' ){
-	                $("#eventDate").jqxDateTimeInput({ formatString: 'yyyy-MM-dd', width:'120px', readonly: true, showCalendarButton: false, allowNullDate:false, allowKeyboardDelete:false});
+	                $("#eventDate").jqxDateTimeInput({ formatString: 'yyyy-MM-dd', width:'120px', 
+	                				readonly: true, showCalendarButton: false, allowNullDate:false, allowKeyboardDelete:false});
 				}else{
 	                $("#eventDate").jqxDateTimeInput({ formatString: 'yyyy-MM-dd', width:'120px', readonly: false });
 				};
@@ -364,18 +365,11 @@
 		// 등록버튼 클릭 시 처리
 		function fn_register() {
 				 
-
-alert( $("#eventDate").val() );
-				
 			$('#oldEventStatus').val( $('#eventStatus').val() );  // 예약 전, event 상태 -> 01: 예약 전, 02: 예약 중
 				 
 			$('#eventStatus').val('02'); // 예약
 			$('#deleteYn').val('N');
 	
-			var formSerialized = $('#scheduleForm').serialize();
-alert( formSerialized );	
-return;
-
 			$.ajax({
 				url : 'registerSchedule',
 				async : true,
