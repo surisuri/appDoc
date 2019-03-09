@@ -154,12 +154,14 @@
 					locale : initialLocaleCode,
 					timezone : 'local',
 					businessHours : true,
-					weekNumbers: true,
 					nowIndicator: true,
 					navLinks : true, // can click day/week names to navigate views
 					selectable : true,
 					selectHelper : true,
 					weekends : false,
+					weekNumbers: true,
+					fixedWeekCount: false,
+					//aspectRatio: 2.3,
 					select : function(start, end) {
 						
 						if( '${adminAccess}' == 'true' ){   // 로직 재확인 필요
