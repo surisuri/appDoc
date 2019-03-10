@@ -282,6 +282,10 @@
 													bgcolor = 'green';
 													textcolor = 'white';
 												}
+												if(r.CHECK_DATE == 'P'){ // 지난 예약을 경우 회색으로 반전시킴
+													bgcolor = 'gray';
+													textcolor = 'white';
+												}
 												
 												events.push({
 													id : r.SCHEDULE_ID,

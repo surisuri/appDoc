@@ -22,6 +22,7 @@ public class ScheduleVO extends CommonVO{
 	private String createUsrId;
 	private String updateDt;
 	private String updateUsrId;
+	private String checkDate;
 	
 	/**
 	 * �떆�옉�씪�옄(議고쉶議곌굔)
@@ -180,5 +181,11 @@ public class ScheduleVO extends CommonVO{
 	}
 	public void setOldEventStatus(String oldEventStatus) {
 		this.oldEventStatus = oldEventStatus;
+	}
+	public String getCheckDate() {
+		return checkDate;
+	}
+	public void setCheckDate(String checkDate) {
+		this.checkDate = checkDate;
 	}
 }

@@ -18,8 +18,8 @@
         		   , PATIENT_NAME
         		   , TREAT_DVS_CODE
         		   , (SELECT inspection_name
-                  FROM medicalcharge b
-			     WHERE b.inspection_Code = a.treat_dvs_code ) "TREAT_DVS_NAME"
+		                FROM medicalcharge b
+					   WHERE b.inspection_Code = a.treat_dvs_code ) "TREAT_DVS_NAME"
         		   , SIMPLE_MSG_CTNT
         		   , EVENT_STATUS
         		   , EXAM_USR_NM 
@@ -30,6 +30,12 @@
         		   , CREATE_USR_ID 
         		   , UPDATE_DT
         		   , UPDATE_USR_ID
+        		   <![CDATA[
+        		   , CASE
+        		      WHEN EVENT_DATE < DATE_FORMAT( NOW(), '%Y-%m-%d') THEN 'P'
+        		      ELSE 'A' 
+        		     END AS CHECK_DATE
+        		   ]]>
  		  FROM schedule a
  		 WHERE EVENT_DATE BETWEEN STR_TO_DATE(#{startDate}, '%Y-%m-%d') AND STR_TO_DATE(#{endDate}, '%Y-%m-%d')
  		   AND DELETE_YN = 'N'
