@@ -222,13 +222,15 @@
 							
 								// 일반 사용자는 "예약불가 event" 클릭시 예약/예약수정/예약삭제 불가 -> 모든 버튼 비활성화
 								// 다른 사용자가 예약한 event 클릭시 예약/예약수정/예약삭제 불가 -> 모든 버튼 비활성화
+								// 지난 예약 event 클릭시 -> 모든 버튼 비활성화
 								if(isAdminAccess == false){  //일반사용자
 									
 									if( (calEvent.treatDvsCode == '19') ||
 										(calEvent.updateUsrId != null && 
 										 calEvent.updateUsrId != 'undefined' &&
 										 calEvent.updateUsrId != '' &&
-										 calEvent.updateUsrId != '${user.username}')
+										 calEvent.updateUsrId != '${user.username}') ||
+										 calEvent.checkDate == 'P'
 									){
 										$("#cancelSchedule").hide();
 										$("#registerSchedule").hide();
@@ -282,6 +284,10 @@
 													bgcolor = 'green';
 													textcolor = 'white';
 												}
+												if(r.CHECK_DATE == 'P'){ // 지난 예약을 경우 회색으로 반전시킴
+													bgcolor = 'gray';
+													textcolor = 'white';
+												}
 												
 												events.push({
 													id : r.SCHEDULE_ID,
@@ -299,6 +305,7 @@
 													simpleMsgCtnt : r.SIMPLE_MSG_CTNT,
 													eventStatus : r.EVENT_STATUS,
 													updateUsrId : r.UPDATE_USR_ID,
+													checkDate : r.CHECK_DATE ,
 													color : bgcolor,
 													textColor: textcolor,
 													borderColor:borderColor
