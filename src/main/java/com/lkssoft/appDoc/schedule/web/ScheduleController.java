@@ -37,7 +37,8 @@ public class ScheduleController {
 		ScheduleVO result = new ScheduleVO();
     		try {
 	    		
-    			// 예약 최초 등록은 담당자가 일괄 등록하거나, 개별 등록하므로 SMS 발송 불필요
+    			// 예약 최초 등록은 
+    			// 담당자가 일괄 등록하거나 개별 등록하므로 SMS 발송 불필요
     			if ( StringUtils.isEmpty( scheduleVo.getScheduleId() )) {
 	    			scheduleSEI.insertSchedule(scheduleVo);
 	    			result.setResult("suc");

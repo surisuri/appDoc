@@ -139,12 +139,38 @@
 					fn_close();
 				});
 		
+				/*
+				 * 관리자가 copyKey(Shift)를 누른 상태일 때만 editable하게 함
+				 */
 				var isAdminAccess = false;
-				if( '${adminAccess}' == 'true' ){ 
-					isAdminAccess = true;  // 추후에 drag & drop -> update 기능 보완시 'true'로 변경 필요함
+				if('${adminAccess}' == 'true'){ 
+					isAdminAccess = true;
 				}else{
 					isAdminAccess = false;
-				}
+				}				
+				// shift key control
+				var copyKey = false;
+				$(document).keydown(function (e){
+						copyKey = e.shiftKey;
+						
+						if( isAdminAccess == true ){
+							
+						  $('#calendar').fullCalendar("option", "editable", true)
+			                .fullCalendar("render");
+						  
+						}
+						
+					}).keyup(function(){
+						copyKey = false;
+						
+						$('#calendar').fullCalendar("option", "editable", false)
+		                .fullCalendar("render");
+						
+					}	
+				);
+				
+				
+				
 				$('#calendar').fullCalendar({
 					header : {
 						left : 'prev,next today',
@@ -161,7 +187,7 @@
 					weekends : false,
 					weekNumbers: true,
 					fixedWeekCount: false,
-					//aspectRatio: 2.3,
+					contentHeight:window.innerHeight * 0.9,
 					select : function(start, end) {
 						
 						if( '${adminAccess}' == 'true' ){   // 로직 재확인 필요
@@ -230,7 +256,7 @@
 										 calEvent.updateUsrId != 'undefined' &&
 										 calEvent.updateUsrId != '' &&
 										 calEvent.updateUsrId != '${user.username}') ||
-										 calEvent.checkDate == 'P'
+										 calEvent.checkDate == 'P' 
 									){
 										$("#cancelSchedule").hide();
 										$("#registerSchedule").hide();
@@ -250,10 +276,9 @@
 							});
 						}
 					},
-					editable : isAdminAccess,
+					editable : false,
 					eventLimit : true, // allow "more" link when too many events
 					events : function(start, end, timezone, callback) {
-						
 						g_start = start;
 						g_end = end;
 												
@@ -335,7 +360,7 @@
 							}
 		                }
 						
-						// popover
+						/* popover
 						var content = event.treatDvsName;
 						element.popover({
 							title:event.patientName,
@@ -343,12 +368,44 @@
 							trigger:'hover',
 							placement:'top',
 							container:'body'
-						});
+						});*/
 				    },
 				    eventAfterRender: function(event, element, view){
 				    	if(event.treatDvsCode == '19'){  // 예약불가
 				            element.css('background-color', '#800000');
 				    	}
+				    },
+				    eventDrop : function(event, dayDelta, minuteDelta){
+						if( '${adminAccess}' == 'true' ){ 
+							
+					    	if(!copyKey) return;  // shift를 누른 상태에서 event 복사 가능
+							
+					    	/* 
+					    	 * 저장절차
+					    	 */
+					    	var date = moment(event.start).format("YYYY-MM-DD");
+							var start = event.start.format("HH:mm");
+							var end = event.end.format("HH:mm");;
+							var treatDvsCode = event.treatDvsCode;
+							var examUsrNm = event.examUsrNm;
+							var simpleMsgCtnt = event.simpleMsgCtnt;
+							var patientName = event.patientName;
+							
+							$("#eventDate").val(date);
+							$("#eventStartTime").val(start);
+							$("#eventEndTime").val(end);
+							
+							$('#oldEventStatus').val( $('#eventStatus').val() );
+							$('#eventStatus').val('02');
+							$('#deleteYn').val('N');
+							
+							$("#patientName").val(patientName);
+							$("#simpleMsgCtnt").val(simpleMsgCtnt);
+							$("#treatDvsCode").val(treatDvsCode);
+							$("#examUsrNm").val(examUsrNm);
+							
+							fn_register();		
+						}
 				    }
 				}); // end of fullcalendar 
 				
@@ -373,14 +430,12 @@
 	
 		// 등록버튼 클릭 시 처리
 		function fn_register() {
-				 
-			$('#oldEventStatus').val( $('#eventStatus').val() );  // ìì½ ì , event ìí -> 01: ìì½ ì , 02: ìì½ ì¤
+			$('#oldEventStatus').val( $('#eventStatus').val() ); 
 			 
-			$('#eventStatus').val('02'); // ìì½
+			$('#eventStatus').val('02');
 			$('#deleteYn').val('N');
-	
+			
 			var formSerialized = $('#scheduleForm').serialize();
-				
 			$.ajax({
 				url : 'registerSchedule',
 				async : true,
