@@ -139,20 +139,37 @@
 					fn_close();
 				});
 		
+				/*
+				 * 관리자가 copyKey(Shift)를 누른 상태일 때만 editable하게 함
+				 */
 				var isAdminAccess = false;
-				if( '${adminAccess}' == 'true' ){ 
+				if('${adminAccess}' == 'true'){ 
 					isAdminAccess = true;
 				}else{
 					isAdminAccess = false;
-				}
-				
+				}				
 				// shift key control
 				var copyKey = false;
 				$(document).keydown(function (e){
-					copyKey = e.shiftKey;
-				}).keyup(function(){
-					copyKey = false;
-				});
+						copyKey = e.shiftKey;
+						
+						if( isAdminAccess == true ){
+							
+						  $('#calendar').fullCalendar("option", "editable", true)
+			                .fullCalendar("render");
+						  
+						}
+						
+					}).keyup(function(){
+						copyKey = false;
+						
+						$('#calendar').fullCalendar("option", "editable", false)
+		                .fullCalendar("render");
+						
+					}	
+				);
+				
+				
 				
 				$('#calendar').fullCalendar({
 					header : {
@@ -170,7 +187,7 @@
 					weekends : false,
 					weekNumbers: true,
 					fixedWeekCount: false,
-					//aspectRatio: 2.3,
+					contentHeight:window.innerHeight * 0.9,
 					select : function(start, end) {
 						
 						if( '${adminAccess}' == 'true' ){   // 로직 재확인 필요
@@ -259,7 +276,7 @@
 							});
 						}
 					},
-					editable : isAdminAccess,
+					editable : false,
 					eventLimit : true, // allow "more" link when too many events
 					events : function(start, end, timezone, callback) {
 						g_start = start;
@@ -343,7 +360,7 @@
 							}
 		                }
 						
-						// popover
+						/* popover
 						var content = event.treatDvsName;
 						element.popover({
 							title:event.patientName,
@@ -351,7 +368,7 @@
 							trigger:'hover',
 							placement:'top',
 							container:'body'
-						});
+						});*/
 				    },
 				    eventAfterRender: function(event, element, view){
 				    	if(event.treatDvsCode == '19'){  // 예약불가
@@ -363,6 +380,9 @@
 							
 					    	if(!copyKey) return;  // shift를 누른 상태에서 event 복사 가능
 							
+					    	/* 
+					    	 * 저장절차
+					    	 */
 					    	var date = moment(event.start).format("YYYY-MM-DD");
 							var start = event.start.format("HH:mm");
 							var end = event.end.format("HH:mm");;
@@ -414,7 +434,7 @@
 			 
 			$('#eventStatus').val('02');
 			$('#deleteYn').val('N');
-	
+			
 			var formSerialized = $('#scheduleForm').serialize();
 			$.ajax({
 				url : 'registerSchedule',
