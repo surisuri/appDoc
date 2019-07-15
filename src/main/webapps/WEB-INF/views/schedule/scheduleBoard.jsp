@@ -187,7 +187,7 @@
 					weekends : false,
 					weekNumbers: true,
 					fixedWeekCount: false,
-					contentHeight:window.innerHeight * 0.9,
+					height:window.innerHeight * 1.5,
 					select : function(start, end) {
 						
 						if( '${adminAccess}' == 'true' ){   // 로직 재확인 필요
