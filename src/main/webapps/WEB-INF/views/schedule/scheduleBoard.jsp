@@ -139,37 +139,23 @@
 					fn_close();
 				});
 		
-				/*
-				 * 관리자가 copyKey(Shift)를 누른 상태일 때만 editable하게 함
-				 */
 				var isAdminAccess = false;
 				if('${adminAccess}' == 'true'){ 
 					isAdminAccess = true;
 				}else{
 					isAdminAccess = false;
 				}				
+				
 				// shift key control
 				var copyKey = false;
 				$(document).keydown(function (e){
 						copyKey = e.shiftKey;
 						
-						if( isAdminAccess == true ){
-							
-						  $('#calendar').fullCalendar("option", "editable", true)
-			                .fullCalendar("render");
-						  
-						}
-						
 					}).keyup(function(){
 						copyKey = false;
 						
-						$('#calendar').fullCalendar("option", "editable", false)
-		                .fullCalendar("render");
-						
 					}	
 				);
-				
-				
 				
 				$('#calendar').fullCalendar({
 					header : {
@@ -187,7 +173,7 @@
 					weekends : false,
 					weekNumbers: true,
 					fixedWeekCount: false,
-					contentHeight:window.innerHeight * 0.9,
+					height:window.innerHeight * 1.3,
 					select : function(start, end) {
 						
 						if( '${adminAccess}' == 'true' ){   // 로직 재확인 필요
@@ -276,7 +262,7 @@
 							});
 						}
 					},
-					editable : false,
+					editable : isAdminAccess,
 					eventLimit : true, // allow "more" link when too many events
 					events : function(start, end, timezone, callback) {
 						g_start = start;
@@ -378,7 +364,20 @@
 				    eventDrop : function(event, dayDelta, minuteDelta){
 						if( '${adminAccess}' == 'true' ){ 
 							
-					    	if(!copyKey) return;  // shift를 누른 상태에서 event 복사 가능
+					    	if(!copyKey){
+					    		
+					    		alert('SHIFT KEY를 누른 상태에서 drag & drop 하세요.')
+					    		
+					    		var sources = fn_search(g_start, g_end );
+								$('#calendar').fullCalendar('removeEventSource', sources);
+								$('#calendar').fullCalendar('refetchEvents');
+								$('#calendar').fullCalendar('addEventSource', sources);
+								$('#calendar').fullCalendar('refetchEvents');
+								
+								$('#scheduleMng').modal('hide');
+					    		
+					    		return;  // shift를 누른 상태에서 event 복사 가능
+					    	}
 							
 					    	/* 
 					    	 * 저장절차
