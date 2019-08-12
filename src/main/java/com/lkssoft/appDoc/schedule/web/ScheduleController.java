@@ -27,6 +27,7 @@ public class ScheduleController {
 	private ScheduleSEI scheduleSEI;
 	
 	/**
+	 * 에약을 등록/변경한다.
 	 * 
 	 * @param commandMap
 	 * @return ModelAndView
@@ -59,6 +60,28 @@ public class ScheduleController {
 	    	return result;
     }
 
+	/**
+	 * drag & drop에 의해 에약을 변경한다.
+	 * 
+	 * @param commandMap
+	 * @return ModelAndView
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/updateSchedule", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody ScheduleVO updateSchedule(HttpServletRequest req, ScheduleVO scheduleVo) throws Exception {
+		ScheduleVO result = new ScheduleVO();
+    		try {
+	    		
+				scheduleSEI.updateSchedule(scheduleVo);
+    			result.setResult("suc");
+    			
+	    	}catch(Exception e) {
+	    		result.setResult(e.toString());
+	    	}
+
+	    	return result;
+    }
+	
 	/**
 	 * 
 	 * @param commandMap

@@ -364,27 +364,9 @@
 				    eventDrop : function(event, dayDelta, minuteDelta){
 						if( '${adminAccess}' == 'true' ){ 
 							
-					    	if(!copyKey){
-					    		
-					    		alert('SHIFT KEY를 누른 상태에서 drag & drop 하세요.')
-					    		
-					    		var sources = fn_search(g_start, g_end );
-								$('#calendar').fullCalendar('removeEventSource', sources);
-								$('#calendar').fullCalendar('refetchEvents');
-								$('#calendar').fullCalendar('addEventSource', sources);
-								$('#calendar').fullCalendar('refetchEvents');
-								
-								$('#scheduleMng').modal('hide');
-					    		
-					    		return;  // shift를 누른 상태에서 event 복사 가능
-					    	}
-							
-					    	/* 
-					    	 * 저장절차
-					    	 */
 					    	var date = moment(event.start).format("YYYY-MM-DD");
 							var start = event.start.format("HH:mm");
-							var end = event.end.format("HH:mm");;
+							var end = event.end.format("HH:mm");
 							var treatDvsCode = event.treatDvsCode;
 							var examUsrNm = event.examUsrNm;
 							var simpleMsgCtnt = event.simpleMsgCtnt;
@@ -402,8 +384,14 @@
 							$("#simpleMsgCtnt").val(simpleMsgCtnt);
 							$("#treatDvsCode").val(treatDvsCode);
 							$("#examUsrNm").val(examUsrNm);
-							
-							fn_register();		
+
+							if(copyKey){  // 복사, shift + (drag & drop)
+								$("#scheduleId").val("");
+								fn_register();
+					    	}else{  // 이동 drag & drop
+								$("#scheduleId").val(event.id);
+					    		fn_updateSchedule();
+					    	}
 						}
 				    }
 				}); // end of fullcalendar 
@@ -427,7 +415,50 @@
 			});  // end of ready
 		
 	
-		// 등록버튼 클릭 시 처리
+		/**
+		 *  drag & drop 에 의한 예약 이동
+		 */
+		function fn_updateSchedule(){
+			$('#oldEventStatus').val( $('#eventStatus').val() ); 
+			 
+			$('#eventStatus').val('02');
+			$('#deleteYn').val('N');
+			
+			var formSerialized = $('#scheduleForm').serialize();
+			$.ajax({
+				url : 'updateSchedule',
+				async : true,
+				type : 'POST',
+				dataType : 'json',
+				data : formSerialized,
+				beforeSend : function(jqXHR) {
+				},
+				success : function(data) {
+					
+					if (data.result == 'suc') {
+						alert('예약이 변경되었습니다.');
+					}else{  // exception message 처리
+						alert( data.result );
+					}
+				},
+				error : function(data) {
+					alert(data.result);
+				},
+				complete : function(jqXHR) {
+					var sources = fn_search(g_start, g_end );
+					$('#calendar').fullCalendar('removeEventSource', sources);
+					$('#calendar').fullCalendar('refetchEvents');
+					$('#calendar').fullCalendar('addEventSource', sources);
+					$('#calendar').fullCalendar('refetchEvents');
+					
+					$('#scheduleMng').modal('hide');
+				}
+			});	
+		}	
+			
+		/* 
+		 * 등록버튼 클릭 시 처리
+		 */
 		function fn_register() {
 			$('#oldEventStatus').val( $('#eventStatus').val() ); 
 			 
