@@ -190,7 +190,7 @@ public class ScheduleSVC implements ScheduleSEI{
 		    scheduleVo.setScheduleBatchCreateYn("Y");
 			
 			if( day == 2 || day == 3 || day == 4 || day == 5 || day == 6 ) {  // mon, tuesday, thursday, friday
-				scheduleVo.setEventStartTime("09:00");
+				scheduleVo.setEventStartTime("09:10");
 				scheduleVo.setEventEndTime("11:00");
 				this.insertSchedule(scheduleVo);
 				
