@@ -30,7 +30,7 @@
 	<properties>
  		<javeee.version>7.0</javeee.version>
 <!--		<spring.version>4.3.6.RELEASE</spring.version> -->
-		<spring.security.version>4.2.3.RELEASE</spring.security.version>
+		<spring.security.version>5.2.10.RELEASE</spring.security.version>
 <!-- 		<mysql.connector.version>5.1.38</mysql.connector.version>
 		<jackson.version>2.9.3</jackson.version>
 		<org.aspectj-version>1.8.9</org.aspectj-version>
